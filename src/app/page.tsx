@@ -1,22 +1,19 @@
 import React from 'react'
-import StyledComponentsWrapper from '@/components/StyledComponentsWrapper'
-import Navigation from '@/components/SimpleNavigation'
-import HeroSection from '@/components/SimpleHero'
-import { 
-  SkipLinks, 
-  StorySection, 
-  ServicesSection, 
-  TestimonialsSection, 
-  BlogSection, 
-  ContactSection 
-} from '@/components/SimpleComponents'
-import { getFeaturedPosts } from '@/server/mdx.server'
+import Navigation from '@/components/Navigation'
+import SkipLinks from '@/components/SkipLinks'
+import HeroSection from '@/components/HeroSection'
+import StorySection from '@/components/StorySection'
+import ServicesSection from '@/components/ServicesSection'
+import TestimonialsSection from '@/components/TestimonialsSection'
+import BlogSection from '@/components/BlogSection'
+import ContactSection from '@/components/ContactSection'
+import { getFeaturedPosts } from '@/lib/blog'
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   const featuredPosts = getFeaturedPosts()
 
   return (
-    <StyledComponentsWrapper>
+    <>
       <SkipLinks />
       <Navigation />
       <main id="main-content">
@@ -27,7 +24,7 @@ const HomePage: React.FC = () => {
         <BlogSection posts={featuredPosts} />
         <ContactSection />
       </main>
-    </StyledComponentsWrapper>
+    </>
   )
 }
 

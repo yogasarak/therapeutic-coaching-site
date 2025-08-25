@@ -1,9 +1,9 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Navigation from '@/components/SimpleNavigation'
-import { BlogPostPage } from '@/components/SimpleBlog'
-import { getAllPosts, getPostBySlug } from '@/server/mdx.server'
+import Navigation from '@/components/Navigation'
+import { BlogPostPage } from '@/components/BlogComponents'
+import { getAllPosts, getPostBySlug } from '@/lib/blog'
 
 interface BlogPostPageProps {
   readonly params: Promise<{ readonly slug: string }>
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 }
 
-const BlogPostPageComponent: React.FC<BlogPostPageProps> = async ({ params }) => {
+const BlogPostPageComponent = async ({ params }: BlogPostPageProps) => {
   const { slug } = await params
   const post = getPostBySlug(slug)
 

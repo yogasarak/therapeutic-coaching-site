@@ -3,10 +3,17 @@ export const scrollToSection = (sectionId: string): void => {
   if (element) {
     const offset = 80
     const elementPosition = element.offsetTop - offset
-    window.scrollTo({
-      top: elementPosition,
-      behavior: 'smooth',
-    })
+    
+    // Use requestAnimationFrame for smoother scrolling
+    if ('scrollBehavior' in document.documentElement.style) {
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth',
+      })
+    } else {
+      // Fallback for browsers that don't support smooth scrolling
+      window.scrollTo(0, elementPosition)
+    }
   }
 }
 
@@ -31,10 +38,26 @@ export const debounce = <T extends ReadonlyArray<unknown>>(
   func: (...args: T) => void,
   delay: number
 ): ((...args: T) => void) => {
-  let timeoutId: NodeJS.Timeout
+  let timeoutId: NodeJS.Timeout | undefined
   return (...args: T) => {
-    clearTimeout(timeoutId)
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
     timeoutId = setTimeout(() => func(...args), delay)
+  }
+}
+
+export const throttle = <T extends ReadonlyArray<unknown>>(
+  func: (...args: T) => void,
+  delay: number
+): ((...args: T) => void) => {
+  let lastCall = 0
+  return (...args: T) => {
+    const now = Date.now()
+    if (now - lastCall >= delay) {
+      lastCall = now
+      func(...args)
+    }
   }
 }
 

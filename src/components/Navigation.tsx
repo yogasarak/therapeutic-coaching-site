@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import styled from 'styled-components'
 import { NavigationSection } from '@/types'
-import { scrollToSection, debounce, isReducedMotion } from '@/utils'
+import { scrollToSection, throttle, isReducedMotion } from '@/utils'
 
 const NavContainer = styled.nav<{ readonly isScrolled: boolean }>`
   position: fixed;
@@ -47,11 +49,21 @@ const NavWrapper = styled.div`
   }
 `
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   font-family: ${props => props.theme.fonts.secondary};
   font-size: 1.5rem;
   font-weight: 700;
   color: ${props => props.theme.colors.primary};
+  text-decoration: none;
+  transition: ${props => 
+    isReducedMotion() 
+      ? 'none' 
+      : 'color 0.2s ease'
+  };
+
+  &:hover {
+    color: ${props => props.theme.colors.accent};
+  }
 `
 
 const DesktopNav = styled.ul`
@@ -195,73 +207,154 @@ const NavLink = styled.button<{ readonly isActive: boolean }>`
 `
 
 const navigationSections: ReadonlyArray<NavigationSection> = [
-  { id: 'home', label: 'Home', href: '#home' },
-  { id: 'story', label: 'Story', href: '#story' },
-  { id: 'services', label: 'Services', href: '#services' },
-  { id: 'testimonials', label: 'Testimonials', href: '#testimonials' },
-  { id: 'blog', label: 'Blog', href: '#blog' },
-  { id: 'contact', label: 'Contact', href: '#contact' },
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'story', label: 'Story', href: '/#story' },
+  { id: 'services', label: 'Services', href: '/#services' },
+  { id: 'testimonials', label: 'Testimonials', href: '/#testimonials' },
+  { id: 'blog', label: 'Blog', href: '/blog' },
+  { id: 'contact', label: 'Contact', href: '/#contact' },
 ] as const
 
 const Navigation: React.FC = () => {
+  const pathname = usePathname()
+  const router = useRouter()
   const [activeSection, setActiveSection] = useState<string>('home')
   const [isScrolled, setIsScrolled] = useState<boolean>(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
 
+  // Determine if we're on the home page
+  const isHomePage = pathname === '/'
+
+  // Initialize active section based on current path and hash
   useEffect(() => {
-    const handleScroll = debounce(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '')
+      
+      if (isHomePage && hash) {
+        // On home page with hash, set active to hash section
+        setActiveSection(hash)
+      } else if (pathname.startsWith('/blog/')) {
+        setActiveSection('blog')
+      } else if (pathname === '/blog') {
+        setActiveSection('blog')
+      } else if (isHomePage) {
+        setActiveSection('home')
+      } else {
+        setActiveSection('home')
+      }
+    }
+  }, [pathname, isHomePage])
+
+  useEffect(() => {
+    const handleScroll = throttle(() => {
       const scrollPosition = window.scrollY
       setIsScrolled(scrollPosition > 50)
 
-      const sections = navigationSections.map(nav => ({
-        id: nav.id,
-        element: document.getElementById(nav.id),
-      }))
+      // Only do section detection on home page
+      if (isHomePage) {
+        // Cache section elements to avoid repeated DOM queries
+        const sectionElements = new Map<string, HTMLElement>()
+        const sectionIds = ['home', 'story', 'services', 'testimonials', 'blog', 'contact']
+        
+        sectionIds.forEach(id => {
+          const element = document.getElementById(id)
+          if (element) {
+            sectionElements.set(id, element)
+          }
+        })
 
-      const currentSection = sections.find(section => {
-        if (!section.element) return false
-        const rect = section.element.getBoundingClientRect()
-        return rect.top <= 100 && rect.bottom >= 100
-      })
+        // Find active section more efficiently
+        let newActiveSection = 'home'
+        const threshold = 100
 
-      if (currentSection) {
-        setActiveSection(currentSection.id)
+        // Check sections in reverse order so we get the topmost visible section
+        for (let i = sectionIds.length - 1; i >= 0; i--) {
+          const id = sectionIds[i]
+          const element = sectionElements.get(id)
+          if (element) {
+            const rect = element.getBoundingClientRect()
+            if (rect.top <= threshold) {
+              newActiveSection = id
+              break
+            }
+          }
+        }
+
+        setActiveSection(newActiveSection)
       }
-    }, 10)
+    }, 50)
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isHomePage])
 
-  const handleNavClick = (sectionId: string) => {
-    scrollToSection(sectionId)
+  const handleNavClick = (section: NavigationSection) => {
     setIsMobileMenuOpen(false)
+    
+    if (section.href.startsWith('/#')) {
+      // Handle home page section links
+      if (isHomePage) {
+        // Already on home page, scroll to section
+        const targetId = section.href.replace('/#', '')
+        scrollToSection(targetId)
+        setActiveSection(targetId)
+        
+        // Update URL hash without triggering navigation
+        window.history.replaceState(null, '', section.href)
+      } else {
+        // Navigate to home page with hash using Next.js router
+        router.push(section.href)
+      }
+    } else if (section.href === '/') {
+      // Navigate to home page
+      router.push('/')
+    } else {
+      // Handle other page navigation (like /blog)
+      router.push(section.href)
+    }
   }
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(prev => !prev)
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent, sectionId: string) => {
+  const handleKeyDown = (event: React.KeyboardEvent, section: NavigationSection) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      handleNavClick(sectionId)
+      handleNavClick(section)
     }
   }
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen && event.target instanceof Element) {
+        const nav = document.getElementById('navigation')
+        if (nav && !nav.contains(event.target)) {
+          setIsMobileMenuOpen(false)
+        }
+      }
+    }
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [isMobileMenuOpen])
 
   return (
     <>
       <NavContainer id="navigation" isScrolled={isScrolled} role="navigation" aria-label="Main navigation">
         <NavWrapper>
-          <Logo>Therapeutic Coaching</Logo>
+          <Logo href="/">Therapeutic Coaching</Logo>
           
           <DesktopNav>
             {navigationSections.map(section => (
               <li key={section.id}>
                 <NavLink
                   isActive={activeSection === section.id}
-                  onClick={() => handleNavClick(section.id)}
-                  onKeyDown={(e) => handleKeyDown(e, section.id)}
+                  onClick={() => handleNavClick(section)}
+                  onKeyDown={(e) => handleKeyDown(e, section)}
                   aria-current={activeSection === section.id ? 'page' : undefined}
                   type="button"
                 >
@@ -292,8 +385,8 @@ const Navigation: React.FC = () => {
             <li key={section.id}>
               <NavLink
                 isActive={activeSection === section.id}
-                onClick={() => handleNavClick(section.id)}
-                onKeyDown={(e) => handleKeyDown(e, section.id)}
+                onClick={() => handleNavClick(section)}
+                onKeyDown={(e) => handleKeyDown(e, section)}
                 aria-current={activeSection === section.id ? 'page' : undefined}
                 type="button"
               >
