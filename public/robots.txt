@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://your-coaching-site.vercel.app
+
+# Sitemaps
+Sitemap: https://your-coaching-site.vercel.app/sitemap.xml
