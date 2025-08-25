@@ -7,6 +7,8 @@ const HeaderContainer = styled.header`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
 `
 
 const Title = styled.h1`

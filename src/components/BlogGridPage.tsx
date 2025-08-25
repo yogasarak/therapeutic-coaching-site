@@ -4,8 +4,12 @@ import React, { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { BlogPost } from '@/types'
-import BlogSearchController from './BlogSearchController'
+import BlogConsumerController from './BlogConsumerController'
 import BlogCard from './BlogCard'
+import PersonalizedCard, { PersonalizedCardData } from '../features/client-portal/PersonalizedCard'
+import PersonalizedCardModal from '../features/client-portal/PersonalizedCardModal'
+import SocialIcons from '../features/social/SocialIcons'
+import { samplePersonalizedCards } from '../features/client-portal/sampleData'
 
 const BlogContainer = styled.div`
   min-height: 100vh;
@@ -118,12 +122,64 @@ const ToggleButton = styled(Link)<{ readonly $isActive: boolean }>`
   }
 `
 
+const SocialSection = styled.aside`
+  position: fixed;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: ${props => props.theme.colors.background};
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius.lg};
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  
+  @media (max-width: ${props => props.theme.breakpoints.desktop}) {
+    right: 1rem;
+  }
+  
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    position: static;
+    transform: none;
+    margin: 2rem auto;
+    width: fit-content;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 1rem 0;
+  }
+`
+
+const SocialLabel = styled.p`
+  margin: 0 0 0.75rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: ${props => props.theme.colors.textMuted};
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    margin-bottom: 1rem;
+  }
+`
+
 interface BlogGridPageProps {
   readonly posts: ReadonlyArray<BlogPost>
 }
 
 const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
   const [filteredPosts, setFilteredPosts] = useState<ReadonlyArray<BlogPost>>(posts)
+  const [selectedCard, setSelectedCard] = useState<PersonalizedCardData | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const socialLinks = [
+    { platform: 'instagram' as const, url: 'https://instagram.com/yourcoachingpractice', label: 'Follow on Instagram' },
+    { platform: 'facebook' as const, url: 'https://facebook.com/yourcoachingpractice', label: 'Like on Facebook' },
+    { platform: 'linkedin' as const, url: 'https://linkedin.com/company/yourcoachingpractice', label: 'Connect on LinkedIn' },
+    { platform: 'personal' as const, url: 'https://yourcoachingwebsite.com', label: 'Visit Website' }
+  ]
 
   // Update filtered posts when posts prop changes
   useEffect(() => {
@@ -134,10 +190,35 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
     setFilteredPosts(newFilteredPosts)
   }, [])
 
+  const handleCardClick = useCallback((card: PersonalizedCardData) => {
+    setSelectedCard(card)
+    setIsModalOpen(true)
+  }, [])
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false)
+    setSelectedCard(null)
+  }, [])
+
   return (
     <BlogContainer>
+      <SocialSection>
+        <SocialLabel>Follow</SocialLabel>
+        <SocialIcons 
+          links={socialLinks}
+          size="small"
+          spacing="tight"
+          color="default"
+          layout="vertical"
+        />
+      </SocialSection>
+      
       <Container>
-        <BackLink href="/">← Back to Home</BackLink>
+        {/* Back to Home Link - Commented out for better consumer app UX
+            Future use: Can be re-enabled by uncommenting the BackLink below
+            Provides navigation back to homepage from blog pages
+            <BackLink href="/">← Back to Home</BackLink>
+        */}
         
         {/* <BlogHeader>
           <BlogTitle>Blog</BlogTitle>
@@ -146,16 +227,19 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
           </BlogSubtitle>
         </BlogHeader> */}
 
-        {/* <ViewToggle>
-          <ToggleButton href="/blog" $isActive={true}>
-            Card View
-          </ToggleButton>
-          <ToggleButton href="/blog/list" $isActive={false}>
-            List View
-          </ToggleButton>
-        </ViewToggle> */}
+        {/* View Toggle Buttons - Commented out for simplified consumer UX
+            Future use: Toggle between card and list view layouts
+            <ViewToggle>
+              <ToggleButton href="/blog" $isActive={true}>
+                Card View
+              </ToggleButton>
+              <ToggleButton href="/blog/list" $isActive={false}>
+                List View
+              </ToggleButton>
+            </ViewToggle>
+        */}
 
-        <BlogSearchController 
+        <BlogConsumerController 
           posts={posts} 
           onFilteredPostsChange={handleFilteredPostsChange}
           title="Blog"
@@ -172,12 +256,42 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
             </p>
           </EmptyState>
         ) : (
-          <BlogGrid>
-            {filteredPosts.map(post => (
-              <BlogCard key={post.slug} post={post} />
-            ))}
-          </BlogGrid>
+          <>
+            {/* Demo: Personalized Cards for Client Portal */}
+            <div style={{ marginBottom: '3rem' }}>
+              <h3 style={{ 
+                textAlign: 'center', 
+                marginBottom: '2rem', 
+                color: '#666',
+                fontSize: '1.1rem',
+                fontWeight: '500'
+              }}>
+                Demo: Personalized Client Cards (Click to open modal)
+              </h3>
+              <BlogGrid>
+                {samplePersonalizedCards.map(card => (
+                  <PersonalizedCard 
+                    key={card.id} 
+                    card={card} 
+                    onClick={handleCardClick}
+                  />
+                ))}
+              </BlogGrid>
+            </div>
+
+            <BlogGrid>
+              {filteredPosts.map(post => (
+                <BlogCard key={post.slug} post={post} />
+              ))}
+            </BlogGrid>
+          </>
         )}
+
+        <PersonalizedCardModal
+          card={selectedCard}
+          isOpen={isModalOpen}
+          onClose={handleModalClose}
+        />
       </Container>
     </BlogContainer>
   )
