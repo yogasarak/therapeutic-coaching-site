@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Merriweather } from 'next/font/google'
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
-import { ThemeProvider } from 'styled-components'
-import { theme } from '@/utils/theme'
-import GlobalStyles from '@/components/GlobalStyles'
+import './globals.css'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -83,12 +81,9 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body>
+      <body className={`${inter.variable} ${merriweather.variable}`}>
         <StyledComponentsRegistry>
-          <ThemeProvider theme={theme}>
-            <GlobalStyles />
-            {children}
-          </ThemeProvider>
+          {children}
         </StyledComponentsRegistry>
       </body>
     </html>

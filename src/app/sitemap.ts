@@ -1,10 +1,10 @@
 import { MetadataRoute } from 'next'
-import { getAllPosts } from '@/utils/mdx'
+import { getAllPosts } from '@/server/mdx.server'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://your-coaching-site.vercel.app'
   const posts = getAllPosts()
-  
+
   const staticPages = [
     {
       url: baseUrl,

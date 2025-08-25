@@ -1,7 +1,6 @@
 'use client'
 
 import { createGlobalStyle } from 'styled-components'
-import { Theme } from '@/types'
 
 const GlobalStyles = createGlobalStyle`
   * {

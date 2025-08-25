@@ -21,7 +21,7 @@ export const getAllPosts = (): ReadonlyArray<BlogPost> => {
       const fullPath = path.join(postsDirectory, fileName)
       const fileContents = fs.readFileSync(fullPath, 'utf8')
       const { data, content } = matter(fileContents)
-
+      
       const readingTimeResult = readingTime(content)
 
       return {
@@ -46,7 +46,7 @@ export const getPostBySlug = (slug: string): BlogPost | null => {
     const fullPath = path.join(postsDirectory, `${slug}.mdx`)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents)
-
+    
     const readingTimeResult = readingTime(content)
 
     return {
@@ -72,8 +72,8 @@ export const getFeaturedPosts = (): ReadonlyArray<BlogPost> => {
 
 export const getPostsByTag = (tag: string): ReadonlyArray<BlogPost> => {
   const allPosts = getAllPosts()
-  return allPosts.filter(post =>
-    post.tags.some(postTag =>
+  return allPosts.filter(post => 
+    post.tags.some(postTag => 
       slugify(postTag) === slugify(tag)
     )
   )
@@ -82,10 +82,10 @@ export const getPostsByTag = (tag: string): ReadonlyArray<BlogPost> => {
 export const getAllTags = (): ReadonlyArray<string> => {
   const allPosts = getAllPosts()
   const tags = new Set<string>()
-
+  
   allPosts.forEach(post => {
     post.tags.forEach(tag => tags.add(tag))
   })
-
+  
   return Array.from(tags).sort()
 }

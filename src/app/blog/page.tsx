@@ -1,8 +1,8 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import Navigation from '@/components/Navigation'
-import BlogListPage from '@/components/BlogListPage'
-import { getAllPosts } from '@/utils/mdx'
+import Navigation from '@/components/SimpleNavigation'
+import { BlogListPage } from '@/components/SimpleBlog'
+import { getAllPosts } from '@/server/mdx.server'
 
 export const metadata: Metadata = {
   title: 'Blog',

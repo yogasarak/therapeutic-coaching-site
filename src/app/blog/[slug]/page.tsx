@@ -1,12 +1,12 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Navigation from '@/components/Navigation'
-import BlogPostPage from '@/components/BlogPostPage'
-import { getAllPosts, getPostBySlug } from '@/utils/mdx'
+import Navigation from '@/components/SimpleNavigation'
+import { BlogPostPage } from '@/components/SimpleBlog'
+import { getAllPosts, getPostBySlug } from '@/server/mdx.server'
 
 interface BlogPostPageProps {
-  readonly params: { readonly slug: string }
+  readonly params: Promise<{ readonly slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -17,8 +17,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const post = getPostBySlug(params.slug)
-  
+  const { slug } = await params
+  const post = getPostBySlug(slug)
+
   if (!post) {
     return {
       title: 'Post Not Found',
@@ -41,8 +42,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 }
 
-const BlogPostPageComponent: React.FC<BlogPostPageProps> = ({ params }) => {
-  const post = getPostBySlug(params.slug)
+const BlogPostPageComponent: React.FC<BlogPostPageProps> = async ({ params }) => {
+  const { slug } = await params
+  const post = getPostBySlug(slug)
 
   if (!post) {
     notFound()
