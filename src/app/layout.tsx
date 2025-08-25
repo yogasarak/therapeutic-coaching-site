@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, Merriweather } from 'next/font/google'
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
+import ClientThemeProvider from '@/components/ClientThemeProvider'
+import BackToTop from '@/components/BackToTop'
 import './globals.css'
 
 const inter = Inter({
@@ -75,15 +77,14 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={`${inter.variable} ${merriweather.variable}`}>
         <StyledComponentsRegistry>
-          {children}
+          <ClientThemeProvider>
+            {children}
+            <BackToTop />
+          </ClientThemeProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

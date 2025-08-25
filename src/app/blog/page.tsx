@@ -1,8 +1,9 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import Navigation from '@/components/SimpleNavigation'
-import { BlogListPage } from '@/components/SimpleBlog'
-import { getAllPosts } from '@/server/mdx.server'
+import Navigation from '@/components/Navigation'
+import BlogGridPage from '@/components/BlogGridPage'
+// import { BlogListPage } from '@/components/BlogComponents'
+import { getAllPosts } from '@/lib/blog'
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -15,14 +16,15 @@ export const metadata: Metadata = {
   },
 }
 
-const BlogPage: React.FC = () => {
+const BlogPage = () => {
   const posts = getAllPosts()
 
   return (
     <>
       <Navigation />
       <main>
-        <BlogListPage posts={posts} />
+        {/* <BlogListPage posts={posts} /> */}
+        <BlogGridPage posts={posts} />
       </main>
     </>
   )

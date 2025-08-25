@@ -1,6 +1,6 @@
 # Therapeutic Coaching Website
 
-A modern, responsive therapeutic coaching website built with Next.js 14, TypeScript, and styled-components. Features include a one-page landing with smooth scroll navigation, MDX blog system, and Vercel deployment optimization.
+A modern, responsive therapeutic coaching website built with Next.js 15, TypeScript, and styled-components v5. Features include a one-page landing with smooth scroll navigation, MDX blog system, and Vercel deployment optimization.
 
 ## 🚀 Features
 
@@ -20,7 +20,7 @@ A modern, responsive therapeutic coaching website built with Next.js 14, TypeScr
 
 ## 🛠 Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 15.5.0 (App Router)
 - **Language**: TypeScript (strict mode, no `any` types)
 - **Styling**: Styled Components + CSS Variables
 - **Content**: MDX with Gray Matter for frontmatter

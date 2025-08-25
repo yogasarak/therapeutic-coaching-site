@@ -7,11 +7,19 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   compiler: {
-    styledComponents: true,
+    styledComponents: {
+      displayName: true,
+      ssr: true,
+      fileName: true,
+      cssProp: true,
+      minify: true,
+      transpileTemplateLiterals: true,
+    },
   },
   experimental: {
     mdxRs: false,
   },
+  poweredByHeader: false,
   async headers() {
     return [
       {
