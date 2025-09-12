@@ -9,6 +9,8 @@ import BlogSection from '@/components/BlogSection'
 import ContactSection from '@/components/ContactSection'
 import { getFeaturedPosts } from '@/lib/blog'
 
+export const dynamic = 'force-static'
+
 const HomePage = () => {
   const featuredPosts = getFeaturedPosts()
 

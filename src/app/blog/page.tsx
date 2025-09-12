@@ -5,6 +5,8 @@ import BlogGridPage from '@/components/BlogGridPage'
 // import { BlogListPage } from '@/components/BlogComponents'
 import { getAllPosts } from '@/lib/blog'
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Insights on personal growth, healing, and the therapeutic journey from a professional therapeutic coach.',
