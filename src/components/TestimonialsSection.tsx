@@ -116,15 +116,13 @@ const NavButton = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'all 0.2s ease'
-  };
+  transition: all 0.2s ease;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   
   &:hover:not(:disabled) {
     background: ${props => props.theme.colors.accent};
-    transform: ${props => isReducedMotion() ? 'none' : 'scale(1.1)'};
+    transform: scale(1.1);
+    @media (prefers-reduced-motion: reduce) { transform: none; }
   }
   
   &:disabled {
@@ -138,22 +136,19 @@ const Indicators = styled.div`
   gap: ${props => props.theme.spacing.xs};
 `
 
-const Indicator = styled.button<{ readonly isActive: boolean }>`
+const Indicator = styled.button<{ readonly $isActive: boolean }>`
   width: 8px;
   height: 8px;
   border-radius: 50%;
   border: none;
   background: ${props => 
-    props.isActive 
+    props.$isActive 
       ? props.theme.colors.primary 
       : props.theme.colors.border
   };
   cursor: pointer;
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'all 0.2s ease'
-  };
+  transition: all 0.2s ease;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   
   &:hover {
     background: ${props => props.theme.colors.primary};
@@ -248,7 +243,7 @@ const TestimonialsSection: React.FC = () => {
             {testimonials.map((_, index) => (
               <Indicator
                 key={index}
-                isActive={index === currentIndex}
+                $isActive={index === currentIndex}
                 onClick={() => handleIndicatorClick(index)}
                 aria-label={`Go to testimonial ${index + 1}`}
               />

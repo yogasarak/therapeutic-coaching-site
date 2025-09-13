@@ -4,7 +4,9 @@ import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { BlogPost } from '@/types'
-import { formatDate, isReducedMotion } from '@/utils'
+import { formatDate, slugify } from '@/utils'
+import { mapTagToType } from '@/utils/tags'
+import { CardBadge as TypeBadge } from '@/features/client-portal/PersonalizedCard.styles'
 
 interface BlogSectionProps {
   readonly posts: ReadonlyArray<BlogPost>
@@ -58,16 +60,19 @@ const BlogCard = styled.article`
   border-radius: ${props => props.theme.borderRadius.lg};
   overflow: hidden;
   box-shadow: ${props => props.theme.shadows.sm};
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-  };
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid ${props => props.theme.colors.border};
 
   &:hover {
-    transform: ${props => isReducedMotion() ? 'none' : 'translateY(-4px)'};
+    transform: translateY(-4px);
     box-shadow: ${props => props.theme.shadows.lg};
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
   }
 `
 
@@ -118,6 +123,10 @@ const BlogTag = styled.span`
   font-weight: 500;
 `
 
+const BlogTypeBadge = styled(TypeBadge)`
+  margin-right: 0.25rem;
+`
+
 const ViewAllLink = styled(Link)`
   display: inline-flex;
   align-items: center;
@@ -132,17 +141,20 @@ const ViewAllLink = styled(Link)`
   border-radius: ${props => props.theme.borderRadius.full};
   font-weight: 600;
   margin-top: ${props => props.theme.spacing.xl};
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-  };
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: ${props => props.theme.shadows.sm};
   
   &:hover {
-    transform: ${props => isReducedMotion() ? 'none' : 'translateY(-2px)'};
+    transform: translateY(-2px);
     box-shadow: ${props => props.theme.shadows.md};
     color: white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
   }
 `
 
@@ -189,9 +201,14 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
                       
                       {post.tags.length > 0 && (
                         <BlogCardTags>
-                          {post.tags.slice(0, 3).map(tag => (
-                            <BlogTag key={tag}>{tag}</BlogTag>
-                          ))}
+                          {post.tags.slice(0, 3).map(tag => {
+                            const type = mapTagToType(tag)
+                            return type ? (
+                              <BlogTypeBadge key={tag} $type={type}>{tag}</BlogTypeBadge>
+                            ) : (
+                              <BlogTag key={tag}>{tag}</BlogTag>
+                            )
+                          })}
                         </BlogCardTags>
                       )}
                     </BlogCardContent>

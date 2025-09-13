@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, Merriweather } from 'next/font/google'
-import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 import ClientThemeProvider from '@/components/ClientThemeProvider'
 import BackToTop from '@/components/BackToTop'
-import './globals.css'
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,7 +18,10 @@ const merriweather = Merriweather({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://your-coaching-site.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app'),
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app',
+  },
   title: {
     default: 'Therapeutic Coaching | Transform Your Life',
     template: '%s | Therapeutic Coaching',
@@ -37,17 +39,12 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://your-coaching-site.vercel.app',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app',
     title: 'Therapeutic Coaching | Transform Your Life',
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
     siteName: 'Therapeutic Coaching',
     images: [
-      {
-        url: '/images/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Therapeutic Coaching',
-      },
+      { url: '/images/og-image.jpg', width: 1200, height: 630, alt: 'Therapeutic Coaching' },
     ],
   },
   twitter: {
@@ -75,7 +72,7 @@ interface RootLayoutProps {
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${merriweather.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>

@@ -10,6 +10,7 @@ import ContactSection from '@/components/ContactSection'
 import Footer from '@/features/layout/Footer'
 import { getFeaturedPosts } from '@/lib/blog'
 
+
 const HomePage = () => {
   const featuredPosts = getFeaturedPosts()
 

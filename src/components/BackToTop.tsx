@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { isReducedMotion } from '@/utils'
 
-const BackToTopButton = styled.button<{ readonly isVisible: boolean }>`
+const BackToTopButton = styled.button<{ readonly $isVisible: boolean }>`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -19,23 +19,20 @@ const BackToTopButton = styled.button<{ readonly isVisible: boolean }>`
   align-items: center;
   justify-content: center;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  opacity: ${props => props.isVisible ? 1 : 0};
-  visibility: ${props => props.isVisible ? 'visible' : 'hidden'};
-  transform: ${props => props.isVisible ? 'translateY(0)' : 'translateY(10px)'};
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none'
-      : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-  };
+  opacity: ${props => props.$isVisible ? 1 : 0};
+  visibility: ${props => props.$isVisible ? 'visible' : 'hidden'};
+  transform: ${props => props.$isVisible ? 'translateY(0)' : 'translateY(10px)'};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   z-index: 999;
 
   &:hover {
-    transform: ${props => props.isVisible ? 'translateY(-2px)' : 'translateY(10px)'};
+    transform: ${props => props.$isVisible ? 'translateY(-2px)' : 'translateY(10px)'};
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }
 
   &:active {
-    transform: ${props => props.isVisible ? 'translateY(0)' : 'translateY(10px)'};
+    transform: ${props => props.$isVisible ? 'translateY(0)' : 'translateY(10px)'};
   }
 
   &:focus-visible {
@@ -106,7 +103,7 @@ const BackToTop: React.FC = () => {
 
   return (
     <BackToTopButton
-      isVisible={isVisible}
+      $isVisible={isVisible}
       onClick={scrollToTop}
       onKeyDown={handleKeyDown}
       aria-label="Scroll to top"

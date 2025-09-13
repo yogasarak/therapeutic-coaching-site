@@ -11,6 +11,8 @@ import Footer from '@/features/layout/Footer'
 import { samplePersonalizedCards, sampleHomeworkChecklists } from '@/features/client-portal/sampleData'
 import styled from 'styled-components'
 
+export const dynamic = 'force-dynamic'
+
 const PortalContainer = styled.div`
   min-height: 100vh;
   padding-top: 80px;

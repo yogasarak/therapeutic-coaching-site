@@ -16,13 +16,15 @@ interface BlogConsumerControllerProps {
   readonly onFilteredPostsChange: (posts: ReadonlyArray<BlogPost>) => void
   readonly title?: string
   readonly subtitle?: string
+  readonly onHasActiveFiltersChange?: (hasActive: boolean) => void
 }
 
 export const BlogConsumerController: React.FC<BlogConsumerControllerProps> = ({
   posts,
   onFilteredPostsChange,
   title = "Blog",
-  subtitle = "Insights on personal growth, healing, and the therapeutic journey"
+  subtitle = "Insights on personal growth, healing, and the therapeutic journey",
+  onHasActiveFiltersChange,
 }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTags, setSelectedTags] = useState<ReadonlyArray<string>>([])
@@ -93,6 +95,12 @@ export const BlogConsumerController: React.FC<BlogConsumerControllerProps> = ({
   const handleFilterToggle = useCallback(() => {
     setIsFiltersVisible(prev => !prev)
   }, [])
+
+  // Let parent know when any filters are active (sync with UI state)
+  const hasActiveFilters = Boolean(searchQuery.trim()) || selectedTags.length > 0
+  React.useEffect(() => {
+    onHasActiveFiltersChange?.(hasActiveFilters)
+  }, [hasActiveFilters, onHasActiveFiltersChange])
 
   return (
     <ConsumerControllerContainer>

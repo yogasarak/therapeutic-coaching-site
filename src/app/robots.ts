@@ -1,12 +1,15 @@
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app'
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/api/', '/_next/', '/admin/'],
-    },
-    sitemap: 'https://your-coaching-site.vercel.app/sitemap.xml',
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/_next/', '/admin/', '/client-portal/'],
+      },
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
   }
 }

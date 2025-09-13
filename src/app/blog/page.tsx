@@ -2,8 +2,8 @@ import React from 'react'
 import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import BlogGridPage from '@/components/BlogGridPage'
-// import { BlogListPage } from '@/components/BlogComponents'
 import { getAllPosts } from '@/lib/blog'
+
 
 export const metadata: Metadata = {
   title: 'Blog',

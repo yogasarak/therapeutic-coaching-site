@@ -196,11 +196,83 @@ const handleClick = (data: any) => { ... }
 ### Build Optimization
 
 The project includes:
-- ✅ **Image Optimization**: Next.js automatic image optimization
-- ✅ **Font Optimization**: Google Fonts with font-display: swap
-- ✅ **Code Splitting**: Automatic with Next.js App Router
-- ✅ **SSR/SSG**: Server-side rendering for optimal performance
-- ✅ **Compression**: Automatic gzip/brotli compression on Vercel
+- **Image Optimization**: Next.js automatic image optimization
+- **Font Optimization**: Google Fonts with font-display: swap
+- **Code Splitting**: Automatic with Next.js App Router
+- **SSR/SSG**: Server-side rendering for optimal performance
+- **Compression**: Automatic gzip/brotli compression on Vercel
+
+## 🎵 Embeds & CSP
+
+- Overview
+  - Embeds (SoundCloud, YouTube, Vimeo) are disabled by default via CSP and HTML sanitization.
+  - To enable an embed provider you must:
+    - Allow the provider in CSP `frame-src` (in `next.config.mjs`).
+    - Allow `<iframe>` and restrict iframe hostnames in the sanitizer (in `src/lib/blog.ts`).
+    - Use safe attributes on iframes (lazy loading, no-referrer, title, etc.).
+
+- CSP (next.config.mjs)
+  - Add provider domains to `frame-src` in both `prodCsp` and `devCsp`:
+    - SoundCloud: `https://w.soundcloud.com`
+    - YouTube: `https://www.youtube.com`
+    - Vimeo: `https://player.vimeo.com`
+  - Example: `frame-src 'self' https://w.soundcloud.com https://www.youtube.com https://player.vimeo.com`
+
+- Sanitization (src/lib/blog.ts)
+  - The blog renders Markdown to HTML and sanitizes it with `sanitize-html`.
+  - Extend the config to allow iframes and restrict hosts:
+    - `allowedTags: [..., 'iframe']`
+    - `allowedAttributes.iframe: ['src','width','height','allow','allowfullscreen','frameborder','loading','referrerpolicy','title']`
+    - `allowedIframeHostnames: ['w.soundcloud.com','www.youtube.com','player.vimeo.com']`
+
+- Markdown usage (in .mdx files)
+  - Use provider iframe HTML directly (sanitizer keeps allowed attributes):
+    - SoundCloud:
+      <iframe
+        width="100%"
+        height="166"
+        scrolling="no"
+        frameborder="no"
+        allow="autoplay"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        title="SoundCloud Player"
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/XXXXXXXX"></iframe>
+    - YouTube:
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/VIDEO_ID"
+        title="YouTube video"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer"></iframe>
+
+- Security notes
+  - Be explicit in `frame-src`; do not use wildcards.
+  - Keep `object-src 'none'` and `base-uri 'self'`.
+  - Sanitizer removes scripts and unknown attributes by default.
+
+### SoundCloud React Component (for pages/components)
+
+- A reusable component is available at `src/components/embeds/SoundCloud.tsx`.
+- Usage in React pages/components (not in Markdown):
+  ```tsx
+  import SoundCloud from '@/components/embeds/SoundCloud'
+
+  // Option 1: provide a SoundCloud track API URL (component builds player URL)
+  <SoundCloud trackUrl="https://api.soundcloud.com/tracks/XXXXXXXX" height={166} />
+
+  // Option 2: provide the full player URL
+  <SoundCloud playerSrc="https://w.soundcloud.com/player/?url=..." height={166} />
+  ```
+
+- Note for blog posts: posts currently render Markdown → sanitized HTML. React components in posts
+  require the MDX component pipeline. If/when you migrate blog rendering to MDX components, you can use
+  `<SoundCloud ... />` directly inside post content.
+
 
 ## 📊 Performance & SEO
 
@@ -211,21 +283,21 @@ The project includes:
 - **SEO**: 100
 
 ### SEO Features
-- ✅ Semantic HTML structure
-- ✅ Open Graph meta tags
-- ✅ Twitter Card tags
-- ✅ Structured data ready
-- ✅ XML sitemap generation
-- ✅ Robots.txt configuration
-- ✅ Canonical URLs
+- Semantic HTML structure
+- Open Graph meta tags
+- Twitter Card tags
+- Structured data ready
+- XML sitemap generation
+- Robots.txt configuration
+- Canonical URLs
 
 ### Accessibility Features
-- ✅ Skip links for keyboard navigation
-- ✅ ARIA labels and roles
-- ✅ Focus management
-- ✅ Reduced motion support
-- ✅ Screen reader optimization
-- ✅ Color contrast compliance
+- Skip links for keyboard navigation
+- ARIA labels and roles
+- Focus management
+- Reduced motion support
+- Screen reader optimization
+- Color contrast compliance
 
 ## 🔒 Security
 
@@ -237,11 +309,11 @@ The project includes:
 - **Referrer-Policy**: Referrer information control
 
 ### Best Practices
-- ✅ No inline scripts (except styled-components SSR)
-- ✅ Secure font loading
-- ✅ Input sanitization
-- ✅ HTTPS enforcement
-- ✅ Environment variable protection
+- No inline scripts (except styled-components SSR)
+- Secure font loading
+- Input sanitization
+- HTTPS enforcement
+- Environment variable protection
 
 ## 🧪 Testing
 

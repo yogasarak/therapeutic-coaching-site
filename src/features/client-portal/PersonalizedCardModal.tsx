@@ -4,7 +4,6 @@ import React from 'react'
 import Modal from '../modal/Modal'
 import MediaEmbed from '../media/MediaEmbed'
 import { PersonalizedCardData } from './PersonalizedCard'
-// import { sanitizeHTML } from '@/utils/sanitize'
 import {
   ModalContent,
   CardTypeHeader,

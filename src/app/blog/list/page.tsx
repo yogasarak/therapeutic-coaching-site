@@ -4,6 +4,7 @@ import Navigation from '@/components/Navigation'
 import { BlogListPage } from '@/components/BlogComponents'
 import { getAllPosts } from '@/lib/blog'
 
+
 export const metadata: Metadata = {
   title: 'Blog List View',
   description: 'Insights on personal growth, healing, and the therapeutic journey - List View',

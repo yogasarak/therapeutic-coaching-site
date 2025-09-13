@@ -270,8 +270,8 @@ export const BlogSearchInterface: React.FC<BlogSearchInterfaceProps> = ({
 
       {hasActiveFilters && (
         <ResultsText>
-          {totalResults} of {totalPosts} articles
-          {searchValue.trim() && <> matching &ldquo;{searchValue.trim()}&rdquo;</>}
+          Showing {totalResults} matching {totalResults === 1 ? 'article' : 'articles'}
+          {searchValue.trim() && <> for &ldquo;{searchValue.trim()}&rdquo;</>}
         </ResultsText>
       )}
     </SearchInterfaceContainer>

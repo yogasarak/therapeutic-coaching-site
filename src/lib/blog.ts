@@ -2,22 +2,37 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import readingTime from 'reading-time'
+import sanitizeHtml from 'sanitize-html'
 import { marked } from 'marked'
-import { BlogPost } from '@/types'
+import type { BlogPost } from '@/types'
 import { slugify } from '@/utils'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
-// Configure marked for better parsing
-marked.setOptions({
-  breaks: true,
-  gfm: true,
-})
+let cachedPosts: ReadonlyArray<BlogPost> | null = null
+let cachedMtime = 0
+
+const getDirectoryMtime = (): number => {
+  try {
+    const stat = fs.statSync(postsDirectory)
+    return stat.mtimeMs
+  } catch {
+    return 0
+  }
+}
+
+// MDX options shared by compilers
+marked.setOptions({ breaks: true, gfm: true })
 
 export function getAllPosts(): ReadonlyArray<BlogPost> {
   try {
     if (!fs.existsSync(postsDirectory)) {
       return []
+    }
+
+    const mtime = getDirectoryMtime()
+    if (cachedPosts && cachedMtime === mtime && process.env.NODE_ENV === 'production') {
+      return cachedPosts
     }
 
     const fileNames = fs.readdirSync(postsDirectory)
@@ -39,19 +54,23 @@ export function getAllPosts(): ReadonlyArray<BlogPost> {
           readingTime: readingTimeResult.text,
           author: data.author || 'Therapeutic Coach',
           tags: (data.tags || []) as ReadonlyArray<string>,
-          content: marked.parse(content) as string,
+          contentHtml: undefined,
+          contentMdx: undefined,
           featured: data.featured || false,
         } as BlogPost
       })
 
-    return posts.sort((a, b) => (a.date < b.date ? 1 : -1))
+    const sorted = posts.sort((a, b) => (a.date < b.date ? 1 : -1))
+    cachedPosts = sorted
+    cachedMtime = mtime
+    return sorted
   } catch (error) {
     console.error('Error getting all posts:', error)
     return []
   }
 }
 
-export function getPostBySlug(slug: string): BlogPost | null {
+export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
     const fullPath = path.join(postsDirectory, `${slug}.mdx`)
     
@@ -64,6 +83,51 @@ export function getPostBySlug(slug: string): BlogPost | null {
     
     const readingTimeResult = readingTime(content)
 
+    // Render Markdown/MDX as HTML and sanitize. Allow audio/source.
+    const rawHtml = marked.parse(content) as string
+    const sanitized = sanitizeHtml(rawHtml, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['audio', 'source', 'iframe', 'button']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        '*': [
+          ...(sanitizeHtml.defaults.allowedAttributes['*'] || []),
+          'data-modal',
+          'data-modal-title',
+          'data-modal-trigger',
+          'data-modal-body',
+          'aria-label',
+          'aria-labelledby',
+          'aria-describedby',
+          'aria-expanded',
+          'aria-controls',
+          'role',
+          'tabindex'
+        ],
+        audio: ['controls', 'src'],
+        source: ['src', 'type'],
+        iframe: ['src', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy', 'title'],
+        button: [
+          ...((sanitizeHtml.defaults.allowedAttributes.button as ReadonlyArray<string> | undefined) || []),
+          'type',
+          'data-modal-trigger',
+          'aria-label'
+        ],
+        div: [
+          ...((sanitizeHtml.defaults.allowedAttributes.div as ReadonlyArray<string> | undefined) || []),
+          'data-modal',
+          'data-modal-title',
+          'data-modal-body'
+        ],
+        a: ['href', 'name', 'target', 'rel'],
+        img: ['src', 'alt', 'title', 'width', 'height'],
+      },
+      allowedSchemes: ['http', 'https', 'data', 'mailto'],
+      allowedIframeHostnames: ['w.soundcloud.com', 'www.youtube.com', 'player.vimeo.com'],
+      transformTags: {
+        a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
+      },
+    })
+
     return {
       slug,
       title: data.title || 'Untitled',
@@ -72,7 +136,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
       readingTime: readingTimeResult.text,
       author: data.author || 'Therapeutic Coach',
       tags: (data.tags || []) as ReadonlyArray<string>,
-      content: marked.parse(content) as string,
+      contentHtml: sanitized,
       featured: data.featured || false,
     }
   } catch (error) {

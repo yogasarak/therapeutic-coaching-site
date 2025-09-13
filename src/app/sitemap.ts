@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/blog'
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://your-coaching-site.vercel.app'
-  const posts = await getAllPosts()
+export default function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app'
+  const posts = getAllPosts()
 
   const staticPages = [
     {
@@ -27,5 +27,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  return [...staticPages, ...blogPosts]
+  return Promise.resolve([...staticPages, ...blogPosts])
 }

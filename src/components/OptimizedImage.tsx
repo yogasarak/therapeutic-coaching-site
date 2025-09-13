@@ -1,21 +1,30 @@
-'use client'
+"use client"
 
 import React from 'react'
 import Image from 'next/image'
 import styled from 'styled-components'
 
-interface OptimizedImageProps {
+type BaseProps = {
   readonly src: string
   readonly alt: string
-  readonly width: number
-  readonly height: number
   readonly priority?: boolean
   readonly className?: string
-  readonly fill?: boolean
   readonly sizes?: string
   readonly placeholder?: 'blur' | 'empty'
   readonly blurDataURL?: string
 }
+
+type FillProps = BaseProps & {
+  readonly fill: true
+}
+
+type FixedProps = BaseProps & {
+  readonly fill?: false
+  readonly width: number
+  readonly height: number
+}
+
+type OptimizedImageProps = FillProps | FixedProps
 
 const ImageWrapper = styled.div<{ readonly fill?: boolean }>`
   position: ${props => props.fill ? 'relative' : 'static'};
@@ -31,25 +40,24 @@ const ImageWrapper = styled.div<{ readonly fill?: boolean }>`
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
-  width,
-  height,
   priority = false,
   className,
-  fill = false,
   sizes,
   placeholder = 'empty',
   blurDataURL,
+  ...rest
 }) => {
+  const isFill = 'fill' in rest && rest.fill === true
   return (
-    <ImageWrapper fill={fill} className={className}>
+    <ImageWrapper fill={isFill} className={className}>
       <Image
         src={src}
         alt={alt}
-        width={fill ? undefined : width}
-        height={fill ? undefined : height}
-        fill={fill}
+        width={isFill ? undefined : (rest as FixedProps).width}
+        height={isFill ? undefined : (rest as FixedProps).height}
+        fill={isFill}
         priority={priority}
-        sizes={sizes || (fill ? '100vw' : undefined)}
+        sizes={sizes || (isFill ? '100vw' : undefined)}
         placeholder={placeholder}
         blurDataURL={blurDataURL}
         quality={85}

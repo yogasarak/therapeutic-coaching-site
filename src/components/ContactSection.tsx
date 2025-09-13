@@ -71,11 +71,8 @@ const Input = styled.input`
   border: 2px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.borderRadius.md};
   font-size: 1rem;
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'border-color 0.2s ease'
-  };
+  transition: border-color 0.2s ease;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   
   &:focus {
     border-color: ${props => props.theme.colors.primary};
@@ -95,11 +92,8 @@ const TextArea = styled.textarea`
   min-height: 120px;
   resize: vertical;
   font-family: inherit;
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'border-color 0.2s ease'
-  };
+  transition: border-color 0.2s ease;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   
   &:focus {
     border-color: ${props => props.theme.colors.primary};
@@ -111,7 +105,7 @@ const TextArea = styled.textarea`
   }
 `
 
-const SubmitButton = styled.button<{ readonly isSubmitting: boolean }>`
+const SubmitButton = styled.button<{ readonly $isSubmitting: boolean }>`
   background: linear-gradient(
     135deg,
     ${props => props.theme.colors.primary} 0%,
@@ -123,22 +117,19 @@ const SubmitButton = styled.button<{ readonly isSubmitting: boolean }>`
   font-size: 1.1rem;
   font-weight: 600;
   border-radius: ${props => props.theme.borderRadius.md};
-  cursor: ${props => props.isSubmitting ? 'not-allowed' : 'pointer'};
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-  };
+  cursor: ${props => props.$isSubmitting ? 'not-allowed' : 'pointer'};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   box-shadow: ${props => props.theme.shadows.sm};
-  opacity: ${props => props.isSubmitting ? '0.7' : '1'};
+  opacity: ${props => props.$isSubmitting ? '0.7' : '1'};
   
   &:hover:not(:disabled) {
-    transform: ${props => isReducedMotion() ? 'none' : 'translateY(-1px)'};
+    transform: translateY(-1px);
     box-shadow: ${props => props.theme.shadows.md};
   }
   
   &:active:not(:disabled) {
-    transform: ${props => isReducedMotion() ? 'none' : 'translateY(0)'};
+    transform: translateY(0);
   }
 `
 
@@ -356,7 +347,7 @@ const ContactSection: React.FC = () => {
               
               <SubmitButton 
                 type="submit" 
-                isSubmitting={isSubmitting}
+                $isSubmitting={isSubmitting}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Sending...' : 'Send Message'}
