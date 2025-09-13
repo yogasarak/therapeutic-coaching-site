@@ -5,6 +5,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import { BlogPost } from '@/types'
 import { formatDate } from '@/utils'
+// import { trustHTML } from '@/utils/sanitize' // last added
 import BlogSearch from './BlogSearch'
 
 const BlogContainer = styled.div`
@@ -225,22 +226,22 @@ const ToggleButton = styled(Link)<{ readonly $isActive: boolean }>`
   font-weight: 500;
   text-decoration: none;
   transition: all 0.2s ease;
-  background-color: ${props => 
-    props.$isActive 
-      ? props.theme.colors.primary 
+  background-color: ${props =>
+    props.$isActive
+      ? props.theme.colors.primary
       : 'transparent'
   };
-  color: ${props => 
-    props.$isActive 
-      ? props.theme.colors.background 
+  color: ${props =>
+    props.$isActive
+      ? props.theme.colors.background
       : props.theme.colors.primary
   };
   border: 1px solid ${props => props.theme.colors.primary};
 
   &:hover {
-    background-color: ${props => 
-      props.$isActive 
-        ? props.theme.colors.accent 
+    background-color: ${props =>
+      props.$isActive
+        ? props.theme.colors.accent
         : props.theme.colors.primary + '15'
     };
   }
@@ -267,7 +268,7 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
     <BlogContainer>
       <Container>
         <BackLink href="/">← Back to Home</BackLink>
-        
+
         <BlogHeader>
           <BlogTitle>Blog</BlogTitle>
           <BlogSubtitle>
@@ -286,16 +287,16 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
           </ViewToggle>
         )}
 
-        <BlogSearch 
-          posts={posts} 
+        <BlogSearch
+          posts={posts}
           onFilteredPostsChange={handleFilteredPostsChange}
         />
 
         {filteredPosts.length === 0 ? (
           <EmptyState>
             <p>
-              {posts.length === 0 
-                ? "No blog posts yet. Check back soon!" 
+              {posts.length === 0
+                ? "No blog posts yet. Check back soon!"
                 : "No posts match your search criteria. Try adjusting your filters."
               }
             </p>
@@ -312,11 +313,11 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
                     <span>•</span>
                     <span>{post.author}</span>
                   </BlogMeta>
-                  
+
                   <BlogPostTitle>{post.title}</BlogPostTitle>
-                  
+
                   <BlogExcerpt>{post.excerpt}</BlogExcerpt>
-                  
+
                   {post.tags.length > 0 && (
                     <TagsContainer>
                       {post.tags.slice(0, 3).map(tag => (
@@ -343,10 +344,10 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
     <BlogContainer>
       <BlogContainer800>
         <BackLink href="/blog">← Back to Blog</BackLink>
-        
+
         <BlogHeader>
           <BlogTitle>{post.title}</BlogTitle>
-          
+
           <BlogMeta>
             <span>By {post.author}</span>
             <span>•</span>
@@ -354,7 +355,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
             <span>•</span>
             <span>{post.readingTime}</span>
           </BlogMeta>
-          
+
           {post.tags.length > 0 && (
             <TagsContainer style={{ marginTop: '2rem' }}>
               {post.tags.map(tag => (
@@ -363,14 +364,14 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
             </TagsContainer>
           )}
         </BlogHeader>
-
         <PostContent dangerouslySetInnerHTML={{ __html: post.content }} />
+        {/* <PostContent dangerouslySetInnerHTML={{ __html: trustHTML(post.content) }} /> */}
 
         <PostFooter>
           <AuthorBox>
             <h3>About the Author</h3>
             <p>
-              Professional therapeutic coach dedicated to helping individuals navigate 
+              Professional therapeutic coach dedicated to helping individuals navigate
               life&apos;s challenges and discover their inner strength.
             </p>
           </AuthorBox>
