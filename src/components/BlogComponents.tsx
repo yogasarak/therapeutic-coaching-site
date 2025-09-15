@@ -114,6 +114,10 @@ const TagsContainer = styled.div`
   }
 `
 
+const TagsContainerWithTopMargin = styled(TagsContainer)`
+  margin-top: 2rem;
+`
+
 const Tag = styled.span`
   background-color: ${props => props.theme.colors.primary}15;
   color: ${props => props.theme.colors.primary};
@@ -203,6 +207,36 @@ const FooterActions = styled.div`
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
     flex-direction: column;
     align-items: center;
+  }
+`
+
+const CardLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+  display: block;
+`
+
+const PrimaryLinkButton = styled(Link)`
+  background: linear-gradient(135deg, ${props => props.theme.colors.primary} 0%, ${props => props.theme.colors.accent} 100%);
+  color: white;
+  border: none;
+  padding: 1.5rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `
 
@@ -305,7 +339,7 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
           <BlogGrid>
             {filteredPosts.map(post => (
               <BlogArticle key={post.slug}>
-                <Link href={`/blog/${post.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                <CardLink href={`/blog/${post.slug}`}>
                   <BlogMeta>
                     <span>{formatDate(post.date)}</span>
                     <span>•</span>
@@ -325,7 +359,7 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
                       ))}
                     </TagsContainer>
                   )}
-                </Link>
+                </CardLink>
               </BlogArticle>
             ))}
           </BlogGrid>
@@ -357,11 +391,11 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
           </BlogMeta>
 
           {post.tags.length > 0 && (
-            <TagsContainer style={{ marginTop: '2rem' }}>
+            <TagsContainerWithTopMargin>
               {post.tags.map(tag => (
                 <Tag key={tag}>{tag}</Tag>
               ))}
-            </TagsContainer>
+            </TagsContainerWithTopMargin>
           )}
         </BlogHeader>
         <PostContent dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -377,12 +411,12 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
           </AuthorBox>
 
           <FooterActions>
-            <Link href="/blog" className="btn-primary">
+            <PrimaryLinkButton href="/blog">
               ← All Posts
-            </Link>
-            <Link href="/#contact" className="btn-primary">
+            </PrimaryLinkButton>
+            <PrimaryLinkButton href="/#contact">
               Get In Touch →
-            </Link>
+            </PrimaryLinkButton>
           </FooterActions>
         </PostFooter>
       </BlogContainer800>

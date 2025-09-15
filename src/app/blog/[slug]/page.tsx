@@ -5,6 +5,8 @@ import Navigation from '@/components/Navigation'
 import { BlogPostPage } from '@/components/BlogComponents'
 import { getAllPosts, getPostBySlug } from '@/lib/blog'
 
+export const dynamic = 'force-static'
+
 interface BlogPostPageProps {
   readonly params: Promise<{ readonly slug: string }>
 }

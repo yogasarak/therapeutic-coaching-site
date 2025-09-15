@@ -53,9 +53,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         placeholder={placeholder}
         blurDataURL={blurDataURL}
         quality={85}
-        style={{
-          objectFit: 'cover',
-        }}
       />
     </ImageWrapper>
   )

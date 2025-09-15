@@ -10,6 +10,8 @@ import ContactSection from '@/components/ContactSection'
 import Footer from '@/features/layout/Footer'
 import { getFeaturedPosts } from '@/lib/blog'
 
+export const dynamic = 'force-static'
+
 const HomePage = () => {
   const featuredPosts = getFeaturedPosts()
 

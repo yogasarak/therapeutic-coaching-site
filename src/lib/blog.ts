@@ -5,6 +5,7 @@ import readingTime from 'reading-time'
 import { marked } from 'marked'
 import { BlogPost } from '@/types'
 import { slugify } from '@/utils'
+import sanitizeHtml from 'sanitize-html'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
@@ -31,6 +32,20 @@ export function getAllPosts(): ReadonlyArray<BlogPost> {
         
         const readingTimeResult = readingTime(content)
 
+        const html = marked.parse(content) as string
+        const sanitized = sanitizeHtml(html, {
+          allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2']),
+          allowedAttributes: {
+            ...sanitizeHtml.defaults.allowedAttributes,
+            a: ['href', 'name', 'target', 'rel'],
+            img: ['src', 'alt', 'title', 'width', 'height'],
+          },
+          allowedSchemes: ['http', 'https', 'data', 'mailto'],
+          transformTags: {
+            a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
+          },
+        })
+
         return {
           slug,
           title: data.title || 'Untitled',
@@ -39,7 +54,7 @@ export function getAllPosts(): ReadonlyArray<BlogPost> {
           readingTime: readingTimeResult.text,
           author: data.author || 'Therapeutic Coach',
           tags: (data.tags || []) as ReadonlyArray<string>,
-          content: marked.parse(content) as string,
+          content: sanitized,
           featured: data.featured || false,
         } as BlogPost
       })
@@ -64,6 +79,20 @@ export function getPostBySlug(slug: string): BlogPost | null {
     
     const readingTimeResult = readingTime(content)
 
+    const html = marked.parse(content) as string
+    const sanitized = sanitizeHtml(html, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2']),
+      allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        a: ['href', 'name', 'target', 'rel'],
+        img: ['src', 'alt', 'title', 'width', 'height'],
+      },
+      allowedSchemes: ['http', 'https', 'data', 'mailto'],
+      transformTags: {
+        a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
+      },
+    })
+
     return {
       slug,
       title: data.title || 'Untitled',
@@ -72,7 +101,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
       readingTime: readingTimeResult.text,
       author: data.author || 'Therapeutic Coach',
       tags: (data.tags || []) as ReadonlyArray<string>,
-      content: marked.parse(content) as string,
+      content: sanitized,
       featured: data.featured || false,
     }
   } catch (error) {

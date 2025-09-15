@@ -200,11 +200,11 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
               ))}
             </BlogGrid>
 
-            <div style={{ textAlign: 'center' }}>
+            <Centered>
               <ViewAllLink href="/blog">
                 View All Posts →
               </ViewAllLink>
-            </div>
+            </Centered>
           </>
         )}
       </BlogContent>
@@ -213,3 +213,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({ posts }) => {
 }
 
 export default BlogSection
+
+const Centered = styled.div`
+  text-align: center;
+`

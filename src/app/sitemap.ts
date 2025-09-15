@@ -1,9 +1,15 @@
 import { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/blog'
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://your-coaching-site.vercel.app'
-  const posts = await getAllPosts()
+// Ensure Node APIs like `fs` are available and force static generation.
+export const runtime = 'nodejs'
+export const dynamic = 'force-static'
+// Cache and re-generate the sitemap every 24 hours (ISR-style).
+export const revalidate = 60 * 60 * 24
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app'
+  const posts = getAllPosts()
 
   const staticPages = [
     {

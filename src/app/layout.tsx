@@ -3,7 +3,6 @@ import { Inter, Merriweather } from 'next/font/google'
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 import ClientThemeProvider from '@/components/ClientThemeProvider'
 import BackToTop from '@/components/BackToTop'
-import './globals.css'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,7 +18,7 @@ const merriweather = Merriweather({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://your-coaching-site.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app'),
   title: {
     default: 'Therapeutic Coaching | Transform Your Life',
     template: '%s | Therapeutic Coaching',
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
     siteName: 'Therapeutic Coaching',
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: '/favicon.ico',
         width: 1200,
         height: 630,
         alt: 'Therapeutic Coaching',
@@ -54,7 +53,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Therapeutic Coaching | Transform Your Life',
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
-    images: ['/images/og-image.jpg'],
+    images: ['/favicon.ico'],
   },
   robots: {
     index: true,
@@ -75,7 +74,7 @@ interface RootLayoutProps {
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${merriweather.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
