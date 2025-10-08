@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import {
   ModalOverlay,
@@ -31,6 +31,9 @@ export const Modal: React.FC<ModalProps> = ({
   closeOnOverlayClick = true,
   closeOnEscape = true
 }) => {
+  const lastFocusedRef = useRef<Element | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
   // Handle escape key press
   useEffect(() => {
     if (!isOpen || !closeOnEscape) return
@@ -48,10 +51,31 @@ export const Modal: React.FC<ModalProps> = ({
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
+      // save last focused element
+      lastFocusedRef.current = document.activeElement
+
       const originalStyle = window.getComputedStyle(document.body).overflow
       document.body.style.overflow = 'hidden'
+
+      let rafId = 0
+      // focus first focusable element inside modal on next paint
+      rafId = window.requestAnimationFrame(() => {
+        if (!containerRef.current) return
+        const focusables = containerRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusables.length > 0) {
+          focusables[0].focus()
+        }
+      })
+
       return () => {
+        window.cancelAnimationFrame(rafId)
         document.body.style.overflow = originalStyle
+        // restore focus
+        if (lastFocusedRef.current instanceof HTMLElement) {
+          lastFocusedRef.current.focus()
+        }
       }
     }
   }, [isOpen])
@@ -66,13 +90,42 @@ export const Modal: React.FC<ModalProps> = ({
     event.stopPropagation()
   }, [])
 
+  // Trap focus within the modal
+  useEffect(() => {
+    if (!isOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !containerRef.current) return
+      const focusables = containerRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      )
+      if (focusables.length === 0) return
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      const active = document.activeElement as HTMLElement | null
+
+      if (e.shiftKey) {
+        if (active === first || !containerRef.current.contains(active)) {
+          e.preventDefault()
+          last.focus()
+        }
+      } else {
+        if (active === last || !containerRef.current.contains(active)) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [isOpen])
+
   if (!isOpen) {
     return null
   }
 
   const modalContent = (
     <ModalOverlay onClick={handleOverlayClick} role="dialog" aria-modal="true">
-      <ModalContainer onClick={handleContainerClick}>
+      <ModalContainer ref={containerRef} onClick={handleContainerClick}>
         {title && (
           <ModalHeader>
             <ModalTitle>{title}</ModalTitle>

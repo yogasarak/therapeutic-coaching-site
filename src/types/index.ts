@@ -28,7 +28,8 @@ export interface BlogPost {
   readonly readingTime: string
   readonly author: string
   readonly tags: ReadonlyArray<string>
-  readonly content: string
+  readonly contentHtml?: string
+  readonly contentMdx?: React.ReactElement
   readonly featured?: boolean
 }
 
@@ -83,3 +84,4 @@ export type Theme = {
     readonly full: string
   }
 }
+import type React from 'react'

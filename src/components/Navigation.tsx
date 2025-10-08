@@ -7,28 +7,25 @@ import styled from 'styled-components'
 import { NavigationSection } from '@/types'
 import { scrollToSection, throttle, isReducedMotion } from '@/utils'
 
-const NavContainer = styled.nav<{ readonly isScrolled: boolean }>`
+const NavContainer = styled.nav<{ readonly $isScrolled: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
   background-color: ${props => 
-    props.isScrolled 
+    props.$isScrolled 
       ? 'rgba(255, 255, 255, 0.95)' 
       : 'rgba(255, 255, 255, 0.1)'
   };
-  backdrop-filter: ${props => props.isScrolled ? 'blur(10px)' : 'none'};
+  backdrop-filter: ${props => props.$isScrolled ? 'blur(10px)' : 'none'};
   border-bottom: ${props => 
-    props.isScrolled 
+    props.$isScrolled 
       ? `1px solid ${props.theme.colors.border}` 
       : 'none'
   };
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-  };
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   padding: ${props => props.theme.spacing.sm} 0;
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
@@ -55,11 +52,8 @@ const Logo = styled(Link)`
   font-weight: 700;
   color: ${props => props.theme.colors.primary};
   text-decoration: none;
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'color 0.2s ease'
-  };
+  transition: color 0.2s ease;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
 
   &:hover {
     color: ${props => props.theme.colors.accent};
@@ -97,11 +91,8 @@ const MobileMenuButton = styled.button`
     height: 2px;
     width: 100%;
     background-color: ${props => props.theme.colors.text};
-    transition: ${props => 
-      isReducedMotion() 
-        ? 'none' 
-        : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-    };
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    @media (prefers-reduced-motion: reduce) { transition: none; }
     transform-origin: center;
 
     &:nth-child(1) {
@@ -114,23 +105,23 @@ const MobileMenuButton = styled.button`
   }
 `
 
-const MobileMenuButtonActive = styled(MobileMenuButton)<{ readonly isOpen: boolean }>`
+const MobileMenuButtonActive = styled(MobileMenuButton)<{ readonly $isOpen: boolean }>`
   span {
     &:nth-child(1) {
-      transform: ${props => props.isOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'};
+      transform: ${props => props.$isOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none'};
     }
 
     &:nth-child(2) {
-      opacity: ${props => props.isOpen ? '0' : '1'};
+      opacity: ${props => props.$isOpen ? '0' : '1'};
     }
 
     &:nth-child(3) {
-      transform: ${props => props.isOpen ? 'rotate(-45deg) translate(7px, -6px)' : 'none'};
+      transform: ${props => props.$isOpen ? 'rotate(-45deg) translate(7px, -6px)' : 'none'};
     }
   }
 `
 
-const MobileNav = styled.div<{ readonly isOpen: boolean }>`
+const MobileNav = styled.div<{ readonly $isOpen: boolean }>`
   position: fixed;
   top: 100%;
   left: 0;
@@ -138,14 +129,11 @@ const MobileNav = styled.div<{ readonly isOpen: boolean }>`
   background-color: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid ${props => props.theme.colors.border};
-  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-100%)'};
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  visibility: ${props => props.isOpen ? 'visible' : 'hidden'};
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-  };
+  transform: ${props => props.$isOpen ? 'translateY(0)' : 'translateY(-100%)'};
+  opacity: ${props => props.$isOpen ? '1' : '0'};
+  visibility: ${props => props.$isOpen ? 'visible' : 'hidden'};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @media (prefers-reduced-motion: reduce) { transition: none; }
   z-index: 999;
 
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
@@ -162,25 +150,22 @@ const MobileNavList = styled.ul`
   gap: ${props => props.theme.spacing.md};
 `
 
-const NavLink = styled.button<{ readonly isActive: boolean }>`
+const NavLink = styled.button<{ readonly $isActive: boolean }>`
   background: none;
   border: none;
   font-family: ${props => props.theme.fonts.primary};
   font-size: 1rem;
-  font-weight: ${props => props.isActive ? '600' : '400'};
+  font-weight: ${props => props.$isActive ? '600' : '400'};
   color: ${props => 
-    props.isActive 
+    props.$isActive 
       ? props.theme.colors.primary 
       : props.theme.colors.text
   };
   cursor: pointer;
   padding: ${props => props.theme.spacing.xs} 0;
   position: relative;
-  transition: ${props => 
-    isReducedMotion() 
-      ? 'none' 
-      : 'color 0.2s ease'
-  };
+  transition: color 0.2s ease;
+  @media (prefers-reduced-motion: reduce) { transition: none; }
 
   &:hover {
     color: ${props => props.theme.colors.primary};
@@ -191,14 +176,11 @@ const NavLink = styled.button<{ readonly isActive: boolean }>`
     position: absolute;
     bottom: -2px;
     left: 0;
-    width: ${props => props.isActive ? '100%' : '0'};
+    width: ${props => props.$isActive ? '100%' : '0'};
     height: 2px;
     background-color: ${props => props.theme.colors.primary};
-    transition: ${props => 
-      isReducedMotion() 
-        ? 'none' 
-        : 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-    };
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    @media (prefers-reduced-motion: reduce) { transition: none; }
   }
 
   &:hover::after {
@@ -218,32 +200,23 @@ const navigationSections: ReadonlyArray<NavigationSection> = [
 const Navigation: React.FC = () => {
   const pathname = usePathname()
   const router = useRouter()
-  const [activeSection, setActiveSection] = useState<string>('home')
+  const [activeSection, setActiveSection] = useState<string>(() => {
+    if (pathname && pathname.startsWith('/blog')) return 'blog'
+    if (pathname === '/') return 'home'
+    return 'home'
+  })
   const [isScrolled, setIsScrolled] = useState<boolean>(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
 
   // Determine if we're on the home page
   const isHomePage = pathname === '/'
 
-  // Initialize active section based on current path and hash
+  // Update active section on hash changes for home page only
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash.replace('#', '')
-      
-      if (isHomePage && hash) {
-        // On home page with hash, set active to hash section
-        setActiveSection(hash)
-      } else if (pathname.startsWith('/blog/')) {
-        setActiveSection('blog')
-      } else if (pathname === '/blog') {
-        setActiveSection('blog')
-      } else if (isHomePage) {
-        setActiveSection('home')
-      } else {
-        setActiveSection('home')
-      }
-    }
-  }, [pathname, isHomePage])
+    if (!isHomePage) return
+    const hash = typeof window !== 'undefined' ? window.location.hash.replace('#', '') : ''
+    if (hash) setActiveSection(hash)
+  }, [isHomePage])
 
   useEffect(() => {
     const handleScroll = throttle(() => {
@@ -344,7 +317,7 @@ const Navigation: React.FC = () => {
 
   return (
     <>
-      <NavContainer id="navigation" isScrolled={isScrolled} role="navigation" aria-label="Main navigation">
+      <NavContainer id="navigation" $isScrolled={isScrolled} role="navigation" aria-label="Main navigation">
         <NavWrapper>
           <Logo href="/">Therapeutic Coaching</Logo>
           
@@ -352,7 +325,7 @@ const Navigation: React.FC = () => {
             {navigationSections.map(section => (
               <li key={section.id}>
                 <NavLink
-                  isActive={activeSection === section.id}
+                  $isActive={activeSection === section.id}
                   onClick={() => handleNavClick(section)}
                   onKeyDown={(e) => handleKeyDown(e, section)}
                   aria-current={activeSection === section.id ? 'page' : undefined}
@@ -365,7 +338,7 @@ const Navigation: React.FC = () => {
           </DesktopNav>
 
           <MobileMenuButtonActive
-            isOpen={isMobileMenuOpen}
+            $isOpen={isMobileMenuOpen}
             onClick={handleMobileMenuToggle}
             aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isMobileMenuOpen}
@@ -379,12 +352,12 @@ const Navigation: React.FC = () => {
         </NavWrapper>
       </NavContainer>
 
-      <MobileNav id="mobile-nav" isOpen={isMobileMenuOpen}>
+      <MobileNav id="mobile-nav" $isOpen={isMobileMenuOpen}>
         <MobileNavList>
           {navigationSections.map(section => (
             <li key={section.id}>
               <NavLink
-                isActive={activeSection === section.id}
+                $isActive={activeSection === section.id}
                 onClick={() => handleNavClick(section)}
                 onKeyDown={(e) => handleKeyDown(e, section)}
                 aria-current={activeSection === section.id ? 'page' : undefined}

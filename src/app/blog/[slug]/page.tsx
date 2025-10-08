@@ -2,11 +2,13 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Navigation from '@/components/Navigation'
-import { BlogPostPage } from '@/components/BlogComponents'
+import BlogPostContent from '@/components/BlogPostContent'
 import { getAllPosts, getPostBySlug } from '@/lib/blog'
 
+
+interface BlogPostParams { readonly slug: string }
 interface BlogPostPageProps {
-  readonly params: Promise<{ readonly slug: string }>
+  readonly params?: Promise<any>
 }
 
 export async function generateStaticParams() {
@@ -17,8 +19,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const post = getPostBySlug(slug)
+  const resolved: BlogPostParams = params ? await params : { slug: '' }
+  const { slug } = resolved
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     return {
@@ -26,11 +29,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     }
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app'
   return {
     title: post.title,
     description: post.excerpt,
     keywords: [...post.tags],
     authors: [{ name: post.author }],
+    alternates: {
+      canonical: `${baseUrl}/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -43,8 +50,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 const BlogPostPageComponent = async ({ params }: BlogPostPageProps) => {
-  const { slug } = await params
-  const post = getPostBySlug(slug)
+  const resolved: BlogPostParams = params ? await params : { slug: '' }
+  const { slug } = resolved
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     notFound()
@@ -54,7 +62,7 @@ const BlogPostPageComponent = async ({ params }: BlogPostPageProps) => {
     <>
       <Navigation />
       <main>
-        <BlogPostPage post={post} />
+        <BlogPostContent post={post} />
       </main>
     </>
   )

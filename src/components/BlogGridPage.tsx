@@ -6,17 +6,18 @@ import styled from 'styled-components'
 import { BlogPost } from '@/types'
 import BlogConsumerController from './BlogConsumerController'
 import BlogCard from './BlogCard'
-import PersonalizedCard, { PersonalizedCardData } from '../features/client-portal/PersonalizedCard'
-import PersonalizedCardModal from '../features/client-portal/PersonalizedCardModal'
 import SocialIcons from '../features/social/SocialIcons'
-import { samplePersonalizedCards } from '../features/client-portal/sampleData'
+import PersonalizedCardModal from '@/features/client-portal/PersonalizedCardModal'
+import { samplePersonalizedCards } from '@/features/client-portal/sampleData'
+import type { PersonalizedCardData } from '@/features/client-portal/PersonalizedCard'
+import { formatDate } from '@/utils'
 
-const BlogContainer = styled.div`
+const BlogContainer = styled.div.withConfig({ componentId: 'BlogGridPage__BlogContainer' })`
   min-height: 100vh;
-  padding-top: 80px;
+  padding: 80px 0 120px;
 `
 
-const Container = styled.div`
+const Container = styled.div.withConfig({ componentId: 'BlogGridPage__Container' })`
   max-width: 1200px;
   margin: 0 auto;
   padding: 4rem ${props => props.theme.spacing.lg};
@@ -26,7 +27,7 @@ const Container = styled.div`
   }
 `
 
-const BackLink = styled(Link)`
+const BackLink = styled(Link).withConfig({ componentId: 'BlogGridPage__BackLink' })`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -41,17 +42,17 @@ const BackLink = styled(Link)`
   }
 `
 
-const BlogHeader = styled.header`
+const BlogHeader = styled.header.withConfig({ componentId: 'BlogGridPage__BlogHeader' })`
   text-align: center;
   margin-bottom: 4rem;
 `
 
-const BlogTitle = styled.h1`
+const BlogTitle = styled.h1.withConfig({ componentId: 'BlogGridPage__BlogTitle' })`
   margin-bottom: ${props => props.theme.spacing.md};
   font-family: ${props => props.theme.fonts.secondary};
 `
 
-const BlogSubtitle = styled.p`
+const BlogSubtitle = styled.p.withConfig({ componentId: 'BlogGridPage__BlogSubtitle' })`
   font-size: 1.2rem;
   color: ${props => props.theme.colors.textMuted};
   max-width: 600px;
@@ -59,7 +60,7 @@ const BlogSubtitle = styled.p`
   line-height: 1.6;
 `
 
-const BlogGrid = styled.div`
+const BlogGrid = styled.div.withConfig({ componentId: 'BlogGridPage__BlogGrid' })`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
@@ -76,7 +77,7 @@ const BlogGrid = styled.div`
   }
 `
 
-const EmptyState = styled.div`
+const EmptyState = styled.div.withConfig({ componentId: 'BlogGridPage__EmptyState' })`
   text-align: center;
   padding: 4rem 0;
   color: ${props => props.theme.colors.textMuted};
@@ -87,14 +88,14 @@ const EmptyState = styled.div`
   }
 `
 
-const ViewToggle = styled.div`
+const ViewToggle = styled.div.withConfig({ componentId: 'BlogGridPage__ViewToggle' })`
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
   gap: 0.5rem;
 `
 
-const ToggleButton = styled(Link)<{ readonly $isActive: boolean }>`
+const ToggleButton = styled(Link).withConfig({ componentId: 'BlogGridPage__ToggleButton' })<{ readonly $isActive: boolean }>`
   padding: 0.5rem 1rem;
   border-radius: ${props => props.theme.borderRadius.md};
   font-size: 0.875rem;
@@ -122,7 +123,7 @@ const ToggleButton = styled(Link)<{ readonly $isActive: boolean }>`
   }
 `
 
-const SocialSection = styled.aside`
+const SocialSection = styled.aside.withConfig({ componentId: 'BlogGridPage__SocialSection' })`
   position: fixed;
   top: 50%;
   right: 2rem;
@@ -151,7 +152,7 @@ const SocialSection = styled.aside`
   }
 `
 
-const SocialLabel = styled.p`
+const SocialLabel = styled.p.withConfig({ componentId: 'BlogGridPage__SocialLabel' })`
   margin: 0 0 0.75rem 0;
   font-size: 0.8rem;
   font-weight: 600;
@@ -165,14 +166,167 @@ const SocialLabel = styled.p`
   }
 `
 
+const PracticeSection = styled.section.withConfig({ componentId: 'BlogGridPage__PracticeSection' })`
+  margin: 5rem auto 0;
+  max-width: 1200px;
+  padding: 0 ${props => props.theme.spacing.lg};
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: 0 ${props => props.theme.spacing.md};
+  }
+`
+
+const PracticeHeader = styled.header.withConfig({ componentId: 'BlogGridPage__PracticeHeader' })`
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  h2 {
+    font-family: ${props => props.theme.fonts.secondary};
+    font-size: clamp(1.75rem, 4vw, 2.4rem);
+    margin-bottom: ${props => props.theme.spacing.sm};
+  }
+
+  p {
+    color: ${props => props.theme.colors.textMuted};
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+`
+
+const PracticeGrid = styled.div.withConfig({ componentId: 'BlogGridPage__PracticeGrid' })`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+`
+
+const PracticeCard = styled.article.withConfig({ componentId: 'BlogGridPage__PracticeCard' })`
+  background: ${props => props.theme.colors.background};
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius.lg};
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.14);
+  }
+`
+
+const PracticeContent = styled.button.withConfig({ componentId: 'BlogGridPage__PracticeContent' })`
+  border: none;
+  background: none;
+  padding: 1.75rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid ${props => props.theme.colors.accent};
+    outline-offset: 3px;
+  }
+`
+
+const PracticeBadgeRow = styled.div.withConfig({ componentId: 'BlogGridPage__PracticeBadgeRow' })`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: ${props => props.theme.spacing.sm};
+`
+
+const PracticeBadge = styled.span.withConfig({ componentId: 'BlogGridPage__PracticeBadge' })<{ readonly $type: PersonalizedCardData['type'] }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: ${props => props.theme.borderRadius.full};
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(15, 23, 42, 0.75);
+  background: ${props => {
+    const palette = props.theme.colors
+    switch (props.$type) {
+      case 'exercise':
+        return `${palette.accent}20`
+      case 'reflection':
+        return `${palette.primary}1A`
+      case 'goal':
+        return `${palette.secondary}20`
+      case 'audio':
+        return `${palette.primary}15`
+      default:
+        return `${palette.border}`
+    }
+  }};
+`
+
+const PracticeTitle = styled.h3.withConfig({ componentId: 'BlogGridPage__PracticeTitle' })`
+  font-family: ${props => props.theme.fonts.secondary};
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  margin: 0;
+  color: ${props => props.theme.colors.text};
+`
+
+const PracticeSubtitle = styled.p.withConfig({ componentId: 'BlogGridPage__PracticeSubtitle' })`
+  margin: 0;
+  color: ${props => props.theme.colors.textMuted};
+  font-size: 0.95rem;
+  line-height: 1.6;
+`
+
+const PracticeFooter = styled.div.withConfig({ componentId: 'BlogGridPage__PracticeFooter' })`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: ${props => props.theme.spacing.sm};
+  color: ${props => props.theme.colors.textMuted};
+  font-size: 0.85rem;
+`
+
+const PracticeCTA = styled.span.withConfig({ componentId: 'BlogGridPage__PracticeCTA' })`
+  font-weight: 600;
+  color: ${props => props.theme.colors.primary};
+
+  &::after {
+    content: ' →';
+    transition: transform 0.2s ease;
+  }
+
+  ${PracticeContent}:hover &::after {
+    transform: translateX(4px);
+  }
+`
+
 interface BlogGridPageProps {
   readonly posts: ReadonlyArray<BlogPost>
 }
 
+const practiceTypeLabels: Record<PersonalizedCardData['type'], string> = {
+  personal: 'Personal Reflection',
+  exercise: 'Guided Exercise',
+  reflection: 'Deep Reflection',
+  goal: 'Goal Focus',
+  audio: 'Audio Session',
+}
+
 const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
   const [filteredPosts, setFilteredPosts] = useState<ReadonlyArray<BlogPost>>(posts)
-  const [selectedCard, setSelectedCard] = useState<PersonalizedCardData | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [, setHasActiveFilters] = useState(false)
+  const [selectedPractice, setSelectedPractice] = useState<PersonalizedCardData | null>(null)
+  const [isPracticeModalOpen, setIsPracticeModalOpen] = useState(false)
 
   const socialLinks = [
     { platform: 'instagram' as const, url: 'https://instagram.com/yourcoachingpractice', label: 'Follow on Instagram' },
@@ -190,15 +344,17 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
     setFilteredPosts(newFilteredPosts)
   }, [])
 
-  const handleCardClick = useCallback((card: PersonalizedCardData) => {
-    setSelectedCard(card)
-    setIsModalOpen(true)
+  const handlePracticeClick = useCallback((card: PersonalizedCardData) => {
+    setSelectedPractice(card)
+    setIsPracticeModalOpen(true)
   }, [])
 
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen(false)
-    setSelectedCard(null)
+  const handlePracticeClose = useCallback(() => {
+    setSelectedPractice(null)
+    setIsPracticeModalOpen(false)
   }, [])
+
+  // Removed demo modal behavior for production clarity
 
   return (
     <BlogContainer>
@@ -244,6 +400,7 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
           onFilteredPostsChange={handleFilteredPostsChange}
           title="Blog"
           subtitle="Insights on personal growth, healing, and the therapeutic journey"
+          onHasActiveFiltersChange={setHasActiveFilters}
         />
 
         {filteredPosts.length === 0 ? (
@@ -257,27 +414,7 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
           </EmptyState>
         ) : (
           <>
-            {/* Demo: Personalized Cards for Client Portal */}
-            <div style={{ marginBottom: '3rem' }}>
-              <h3 style={{ 
-                textAlign: 'center', 
-                marginBottom: '2rem', 
-                color: '#666',
-                fontSize: '1.1rem',
-                fontWeight: '500'
-              }}>
-                Demo: Personalized Client Cards (Click to open modal)
-              </h3>
-              <BlogGrid>
-                {samplePersonalizedCards.map(card => (
-                  <PersonalizedCard 
-                    key={card.id} 
-                    card={card} 
-                    onClick={handleCardClick}
-                  />
-                ))}
-              </BlogGrid>
-            </div>
+            {/* Demo cards removed to avoid confusing blog filtering */}
 
             <BlogGrid>
               {filteredPosts.map(post => (
@@ -287,12 +424,43 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
           </>
         )}
 
-        <PersonalizedCardModal
-          card={selectedCard}
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
-        />
+        {/* No demo modal */}
       </Container>
+
+      <PracticeSection>
+        <PracticeHeader>
+          <h2>Therapeutic Practice Spotlights</h2>
+          <p>
+            A rotating selection of guided exercises and reflections I often share with clients. 
+            Open any spotlight to experience the full practice.
+          </p>
+        </PracticeHeader>
+
+        <PracticeGrid>
+          {samplePersonalizedCards.slice(0, 3).map(card => (
+            <PracticeCard key={card.id}>
+              <PracticeContent type="button" onClick={() => handlePracticeClick(card)}>
+                <PracticeBadgeRow>
+                  <PracticeBadge $type={card.type}>{practiceTypeLabels[card.type]}</PracticeBadge>
+                  {card.progress && <span>{card.progress}</span>}
+                </PracticeBadgeRow>
+                <PracticeTitle>{card.title}</PracticeTitle>
+                {card.subtitle && <PracticeSubtitle>{card.subtitle}</PracticeSubtitle>}
+                <PracticeFooter>
+                  <span>{formatDate(card.createdDate)}</span>
+                  <PracticeCTA>View practice</PracticeCTA>
+                </PracticeFooter>
+              </PracticeContent>
+            </PracticeCard>
+          ))}
+        </PracticeGrid>
+      </PracticeSection>
+
+      <PersonalizedCardModal
+        card={selectedPractice}
+        isOpen={isPracticeModalOpen}
+        onClose={handlePracticeClose}
+      />
     </BlogContainer>
   )
 }

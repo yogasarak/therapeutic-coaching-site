@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { BlogPost } from '@/types'
 import { formatDate } from '@/utils'
 
-const Card = styled.article`
+const Card = styled.article.withConfig({ componentId: 'BlogCard__Card' })`
   background: ${props => props.theme.colors.background};
   border-radius: ${props => props.theme.borderRadius.lg};
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@ const Card = styled.article`
   }
 `
 
-const CardLink = styled(Link)`
+const CardLink = styled(Link).withConfig({ componentId: 'BlogCard__CardLink' })`
   text-decoration: none;
   color: inherit;
   height: 100%;
@@ -32,11 +32,11 @@ const CardLink = styled(Link)`
   flex-direction: column;
 `
 
-const CardHeader = styled.div`
+const CardHeader = styled.div.withConfig({ componentId: 'BlogCard__CardHeader' })`
   padding: 1.5rem 1.5rem 0;
 `
 
-const CardMeta = styled.div`
+const CardMeta = styled.div.withConfig({ componentId: 'BlogCard__CardMeta' })`
   display: flex;
   align-items: center;
   gap: ${props => props.theme.spacing.sm};
@@ -46,11 +46,11 @@ const CardMeta = styled.div`
   flex-wrap: wrap;
 `
 
-const MetaDot = styled.span`
+const MetaDot = styled.span.withConfig({ componentId: 'BlogCard__MetaDot' })`
   color: ${props => props.theme.colors.border};
 `
 
-const CardTitle = styled.h2`
+const CardTitle = styled.h2.withConfig({ componentId: 'BlogCard__CardTitle' })`
   font-family: ${props => props.theme.fonts.secondary};
   font-size: 1.5rem;
   font-weight: 700;
@@ -68,14 +68,14 @@ const CardTitle = styled.h2`
   }
 `
 
-const CardContent = styled.div`
+const CardContent = styled.div.withConfig({ componentId: 'BlogCard__CardContent' })`
   padding: 0 1.5rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 `
 
-const CardExcerpt = styled.p`
+const CardExcerpt = styled.p.withConfig({ componentId: 'BlogCard__CardExcerpt' })`
   color: ${props => props.theme.colors.textMuted};
   line-height: 1.6;
   font-size: 1rem;
@@ -88,18 +88,18 @@ const CardExcerpt = styled.p`
   text-overflow: ellipsis;
 `
 
-const CardFooter = styled.div`
+const CardFooter = styled.div.withConfig({ componentId: 'BlogCard__CardFooter' })`
   padding: 0 1.5rem 1.5rem;
   margin-top: auto;
 `
 
-const TagsContainer = styled.div`
+const TagsContainer = styled.div.withConfig({ componentId: 'BlogCard__TagsContainer' })`
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 `
 
-const Tag = styled.span`
+const Tag = styled.span.withConfig({ componentId: 'BlogCard__Tag' })`
   background-color: ${props => props.theme.colors.primary}15;
   color: ${props => props.theme.colors.primary};
   padding: 0.375rem 0.75rem;
@@ -113,7 +113,7 @@ const Tag = styled.span`
   }
 `
 
-const ReadMoreButton = styled.div`
+const ReadMoreButton = styled.div.withConfig({ componentId: 'BlogCard__ReadMoreButton' })`
   color: ${props => props.theme.colors.primary};
   font-weight: 600;
   font-size: 0.875rem;

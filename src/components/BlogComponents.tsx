@@ -4,9 +4,9 @@ import React, { useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { BlogPost } from '@/types'
-import { formatDate } from '@/utils'
-// import { trustHTML } from '@/utils/sanitize' // last added
-import BlogSearch from './BlogSearch'
+import { formatDate, slugify } from '@/utils'
+import { CardBadge as TypeBadge } from '@/features/client-portal/PersonalizedCard.styles'
+import BlogConsumerController from './BlogConsumerController'
 
 const BlogContainer = styled.div`
   min-height: 100vh;
@@ -122,6 +122,48 @@ const Tag = styled.span`
   font-size: 0.8rem;
   font-weight: 500;
 `
+
+const TagsContainerWithTopMargin = styled(TagsContainer)`
+  margin-top: 2rem;
+`
+
+const BlogTypeBadge = styled(TypeBadge)`
+  margin-right: 0.25rem;
+`
+
+const CardLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+  display: block;
+`
+
+const PrimaryLinkButton = styled(Link)`
+  background: linear-gradient(135deg, ${props => props.theme.colors.primary} 0%, ${props => props.theme.colors.accent} 100%);
+  color: white;
+  border: none;
+  padding: 1.5rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+  &:active { transform: translateY(0); }
+`
+
+const mapTagToType = (tag: string): 'personal' | 'exercise' | 'reflection' | 'goal' | 'audio' | null => {
+  const t = slugify(tag)
+  if (t.includes('exercise') || t.includes('practice') || t.includes('homework')) return 'exercise'
+  if (t.includes('reflection') || t.includes('journal')) return 'reflection'
+  if (t.includes('goal')) return 'goal'
+  if (t.includes('audio') || t.includes('podcast')) return 'audio'
+  if (t.includes('personal')) return 'personal'
+  return null
+}
 
 const PostContent = styled.div`
   line-height: 1.8;
@@ -287,9 +329,11 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
           </ViewToggle>
         )}
 
-        <BlogSearch
+        <BlogConsumerController
           posts={posts}
           onFilteredPostsChange={handleFilteredPostsChange}
+          title="Blog"
+          subtitle="Insights on personal growth, healing, and the therapeutic journey"
         />
 
         {filteredPosts.length === 0 ? (
@@ -305,7 +349,7 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
           <BlogGrid>
             {filteredPosts.map(post => (
               <BlogArticle key={post.slug}>
-                <Link href={`/blog/${post.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                <CardLink href={`/blog/${post.slug}`}>
                   <BlogMeta>
                     <span>{formatDate(post.date)}</span>
                     <span>•</span>
@@ -320,12 +364,17 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ posts, showViewToggl
 
                   {post.tags.length > 0 && (
                     <TagsContainer>
-                      {post.tags.slice(0, 3).map(tag => (
-                        <Tag key={tag}>{tag}</Tag>
-                      ))}
+                      {post.tags.slice(0, 3).map(tag => {
+                        const type = mapTagToType(tag)
+                        return type ? (
+                          <BlogTypeBadge key={tag} $type={type}>{tag}</BlogTypeBadge>
+                        ) : (
+                          <Tag key={tag}>{tag}</Tag>
+                        )
+                      })}
                     </TagsContainer>
                   )}
-                </Link>
+                </CardLink>
               </BlogArticle>
             ))}
           </BlogGrid>
@@ -357,14 +406,23 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
           </BlogMeta>
 
           {post.tags.length > 0 && (
-            <TagsContainer style={{ marginTop: '2rem' }}>
-              {post.tags.map(tag => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </TagsContainer>
+            <TagsContainerWithTopMargin>
+              {post.tags.map(tag => {
+                const type = mapTagToType(tag)
+                return type ? (
+                  <BlogTypeBadge key={tag} $type={type}>{tag}</BlogTypeBadge>
+                ) : (
+                  <Tag key={tag}>{tag}</Tag>
+                )
+              })}
+            </TagsContainerWithTopMargin>
           )}
         </BlogHeader>
-        <PostContent dangerouslySetInnerHTML={{ __html: post.content }} />
+        {post.contentMdx ? (
+          <PostContent>{post.contentMdx}</PostContent>
+        ) : (
+          <PostContent dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }} />
+        )}
         {/* <PostContent dangerouslySetInnerHTML={{ __html: trustHTML(post.content) }} /> */}
 
         <PostFooter>
@@ -377,12 +435,8 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
           </AuthorBox>
 
           <FooterActions>
-            <Link href="/blog" className="btn-primary">
-              ← All Posts
-            </Link>
-            <Link href="/#contact" className="btn-primary">
-              Get In Touch →
-            </Link>
+            <PrimaryLinkButton href="/blog">← All Posts</PrimaryLinkButton>
+            <PrimaryLinkButton href="/#contact">Get In Touch →</PrimaryLinkButton>
           </FooterActions>
         </PostFooter>
       </BlogContainer800>
