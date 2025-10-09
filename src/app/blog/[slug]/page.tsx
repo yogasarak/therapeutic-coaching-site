@@ -7,8 +7,9 @@ import { getAllPosts, getPostBySlug } from '@/lib/blog'
 
 
 interface BlogPostParams { readonly slug: string }
+
 interface BlogPostPageProps {
-  readonly params?: Promise<any>
+  readonly params: Promise<BlogPostParams>
 }
 
 export async function generateStaticParams() {
@@ -19,8 +20,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const resolved: BlogPostParams = params ? await params : { slug: '' }
-  const { slug } = resolved
+  const { slug } = await params
   const post = await getPostBySlug(slug)
 
   if (!post) {
@@ -50,8 +50,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 const BlogPostPageComponent = async ({ params }: BlogPostPageProps) => {
-  const resolved: BlogPostParams = params ? await params : { slug: '' }
-  const { slug } = resolved
+  const { slug } = await params
   const post = await getPostBySlug(slug)
 
   if (!post) {

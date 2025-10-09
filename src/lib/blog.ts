@@ -4,13 +4,16 @@ import matter from 'gray-matter'
 import readingTime from 'reading-time'
 import sanitizeHtml from 'sanitize-html'
 import { marked } from 'marked'
+import type { ReactElement } from 'react'
 import type { BlogPost } from '@/types'
 import { slugify } from '@/utils'
+import { compileBlogMdx } from './mdx'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
 let cachedPosts: ReadonlyArray<BlogPost> | null = null
 let cachedMtime = 0
+const compiledPostCache = new Map<string, ReactElement>()
 
 const getDirectoryMtime = (): number => {
   try {
@@ -128,6 +131,13 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
       },
     })
 
+    let compiled = compiledPostCache.get(slug)
+    if (!compiled) {
+      const { content: mdxContent } = await compileBlogMdx(content)
+      compiled = mdxContent
+      compiledPostCache.set(slug, compiled)
+    }
+
     return {
       slug,
       title: data.title || 'Untitled',
@@ -137,6 +147,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
       author: data.author || 'Therapeutic Coach',
       tags: (data.tags || []) as ReadonlyArray<string>,
       contentHtml: sanitized,
+      contentMdx: compiled,
       featured: data.featured || false,
     }
   } catch (error) {
