@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import type { SoundCloudTrackKey } from '@/content/media/soundcloudTracks'
 import NewContentBadge from '../badge/NewContentBadge'
 import {
   Card,
@@ -33,6 +34,9 @@ export interface PersonalizedCardData {
   readonly mediaUrl?: string
   readonly mediaType?: 'audio' | 'video' | 'soundcloud' | 'youtube'
   readonly mediaDuration?: string
+  readonly mediaOptions?: {
+    readonly soundcloudTrack?: SoundCloudTrackKey
+  }
 }
 
 interface PersonalizedCardProps {

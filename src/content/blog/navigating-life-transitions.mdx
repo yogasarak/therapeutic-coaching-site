@@ -7,7 +7,8 @@ tags: ["life transitions", "change", "resilience", "personal growth"]
 featured: true
 ---
 
-# Navigating Life Transitions: Finding Your Way Through Change
+import AudioPlayer from '@/components/AudioPlayer'
+import { audioTracks } from '@/content/media/audioTracks'
 
 Change is the only constant in life, yet it remains one of the most challenging aspects of the human experience. Whether you're facing a career shift, relationship change, loss of a loved one, or any other significant life transition, the process can feel overwhelming and uncertain.
 
@@ -74,10 +75,10 @@ While challenging, transitions offer unique opportunities:
 
 ## Audio Reflection: Guided Transition Meditation
 
-<audio controls>
-  <source src="/audio/transition-meditation.mp3" type="audio/mpeg" />
-  Your browser does not support the audio element.
-</audio>
+<AudioPlayer
+  src={audioTracks.transitionMeditation.src}
+  aria-label="Guided transition meditation audio"
+/>
 
 *A 10-minute guided meditation to help you find peace and clarity during times of transition.*
 

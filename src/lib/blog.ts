@@ -8,6 +8,7 @@ import type { ReactElement } from 'react'
 import type { BlogPost } from '@/types'
 import { slugify } from '@/utils'
 import { compileBlogMdx } from './mdx'
+import { readFrontmatterSnapshot, writeFrontmatterSnapshot } from './cache/frontmatter'
 
 const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
@@ -38,6 +39,13 @@ export function getAllPosts(): ReadonlyArray<BlogPost> {
       return cachedPosts
     }
 
+    const snapshot = readFrontmatterSnapshot(mtime)
+    if (snapshot) {
+      cachedPosts = snapshot
+      cachedMtime = mtime
+      return snapshot
+    }
+
     const fileNames = fs.readdirSync(postsDirectory)
     const posts = fileNames
       .filter(fileName => fileName.endsWith('.mdx'))
@@ -66,6 +74,7 @@ export function getAllPosts(): ReadonlyArray<BlogPost> {
     const sorted = posts.sort((a, b) => (a.date < b.date ? 1 : -1))
     cachedPosts = sorted
     cachedMtime = mtime
+    writeFrontmatterSnapshot(sorted, mtime)
     return sorted
   } catch (error) {
     console.error('Error getting all posts:', error)
@@ -88,7 +97,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 
     // Render Markdown/MDX as HTML and sanitize. Allow audio/source.
     const rawHtml = marked.parse(content) as string
-    const sanitized = sanitizeHtml(rawHtml, {
+    const sanitizedHtml = sanitizeHtml(rawHtml, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['audio', 'source', 'iframe', 'button']),
       allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
@@ -125,7 +134,13 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
         img: ['src', 'alt', 'title', 'width', 'height'],
       },
       allowedSchemes: ['http', 'https', 'data', 'mailto'],
-      allowedIframeHostnames: ['w.soundcloud.com', 'www.youtube.com', 'player.vimeo.com'],
+      allowedIframeHostnames: [
+        'w.soundcloud.com',
+        'player.soundcloud.com',
+        'soundcloud.com',
+        'www.youtube.com',
+        'player.vimeo.com'
+      ],
       transformTags: {
         a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
       },
@@ -146,7 +161,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
       readingTime: readingTimeResult.text,
       author: data.author || 'Therapeutic Coach',
       tags: (data.tags || []) as ReadonlyArray<string>,
-      contentHtml: sanitized,
+      contentHtml: sanitizedHtml,
       contentMdx: compiled,
       featured: data.featured || false,
     }

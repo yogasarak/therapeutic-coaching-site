@@ -8,8 +8,8 @@ import BlogConsumerController from './BlogConsumerController'
 import BlogCard from './BlogCard'
 import SocialIcons from '../features/social/SocialIcons'
 import PersonalizedCardModal from '@/features/client-portal/PersonalizedCardModal'
-import { samplePersonalizedCards } from '@/features/client-portal/sampleData'
 import type { PersonalizedCardData } from '@/features/client-portal/PersonalizedCard'
+import { spotlightPractices } from '@/content/spotlights'
 import { formatDate } from '@/utils'
 
 const BlogContainer = styled.div.withConfig({ componentId: 'BlogGridPage__BlogContainer' })`
@@ -286,6 +286,13 @@ const PracticeSubtitle = styled.p.withConfig({ componentId: 'BlogGridPage__Pract
   line-height: 1.6;
 `
 
+const PracticeDescription = styled.p.withConfig({ componentId: 'BlogGridPage__PracticeDescription' })`
+  margin: 0;
+  color: ${props => props.theme.colors.textMuted};
+  font-size: 0.9rem;
+  line-height: 1.6;
+`
+
 const PracticeFooter = styled.div.withConfig({ componentId: 'BlogGridPage__PracticeFooter' })`
   display: flex;
   justify-content: space-between;
@@ -437,7 +444,7 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
         </PracticeHeader>
 
         <PracticeGrid>
-          {samplePersonalizedCards.slice(0, 3).map(card => (
+          {spotlightPractices.map(card => (
             <PracticeCard key={card.id}>
               <PracticeContent type="button" onClick={() => handlePracticeClick(card)}>
                 <PracticeBadgeRow>
@@ -446,6 +453,7 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
                 </PracticeBadgeRow>
                 <PracticeTitle>{card.title}</PracticeTitle>
                 {card.subtitle && <PracticeSubtitle>{card.subtitle}</PracticeSubtitle>}
+                {card.description && <PracticeDescription>{card.description}</PracticeDescription>}
                 <PracticeFooter>
                   <span>{formatDate(card.createdDate)}</span>
                   <PracticeCTA>View practice</PracticeCTA>

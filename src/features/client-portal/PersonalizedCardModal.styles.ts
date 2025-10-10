@@ -58,7 +58,7 @@ export const CardTypeHeader = styled.div<{ readonly $type: 'personal' | 'exercis
 `
 
 export const CardSubtitle = styled.p`
-  margin: 0 0 1.5rem 0;
+  margin: 0;
   font-size: 1.1rem;
   color: ${props => props.theme.colors.textMuted};
   font-weight: 500;

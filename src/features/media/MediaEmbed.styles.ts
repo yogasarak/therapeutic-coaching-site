@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import AudioPlayerBase from '@/components/AudioPlayer'
 
 export const MediaContainer = styled.div`
   width: 100%;
@@ -50,7 +51,7 @@ export const MediaContent = styled.div`
   }
 `
 
-export const AudioPlayer = styled.audio`
+export const AudioPlayer = styled(AudioPlayerBase)`
   width: 100%;
   height: 54px;
   background: ${props => props.theme.colors.background};
@@ -72,19 +73,34 @@ export const VideoPlayer = styled.video`
   background: ${props => props.theme.colors.surface || '#000'};
 `
 
-export const EmbedFrame = styled.iframe<{ readonly $aspectRatio?: number }>`
+export const EmbedFrame = styled.iframe<{ readonly $aspectRatio?: number; readonly $height?: number }>`
   width: 100%;
-  height: ${props => props.$aspectRatio ? `${100 / props.$aspectRatio}vw` : '166px'};
-  min-height: 166px;
+  height: ${props => {
+    if (props.$height) {
+      return `${props.$height}px`
+    }
+    return props.$aspectRatio ? `${100 / props.$aspectRatio}vw` : '166px'
+  }};
+  min-height: ${props => props.$height ? `${props.$height}px` : '166px'};
   max-height: 400px;
   border: none;
   
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    height: ${props => props.$aspectRatio ? `${100 / props.$aspectRatio * 0.9}vw` : '200px'};
+    height: ${props => {
+      if (props.$height) {
+        return `${Math.max(props.$height - 20, 140)}px`
+      }
+      return props.$aspectRatio ? `${100 / props.$aspectRatio * 0.9}vw` : '200px'
+    }};
   }
   
   @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    height: ${props => props.$aspectRatio ? `${100 / props.$aspectRatio * 0.85}vw` : '180px'};
+    height: ${props => {
+      if (props.$height) {
+        return `${Math.max(props.$height - 36, 130)}px`
+      }
+      return props.$aspectRatio ? `${100 / props.$aspectRatio * 0.85}vw` : '180px'
+    }};
   }
 `
 
@@ -100,26 +116,16 @@ export const ErrorMessage = styled.div`
   }
 `
 
-export const LoadingSpinner = styled.div`
+export const SoundCloudPlaceholder = styled.div<{ readonly $height: number }>`
+  width: 100%;
+  min-height: ${props => `${props.$height}px`};
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 2rem;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.04);
   color: ${props => props.theme.colors.textMuted};
-  
-  &::after {
-    content: '';
-    width: 20px;
-    height: 20px;
-    border: 2px solid ${props => props.theme.colors.border};
-    border-top-color: ${props => props.theme.colors.primary};
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
 `
