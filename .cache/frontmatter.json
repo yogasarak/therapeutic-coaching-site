@@ -1,0 +1,80 @@
+{
+  "mtime": 1761147318045.588,
+  "posts": [
+    {
+      "slug": "meditation-sweet-sweet-steep",
+      "title": "Meditation: Sweet Sweet Steep",
+      "excerpt": "Experience a restorative SoundCloud meditation while demonstrating the reusable audio workflow for new content.",
+      "date": "2024-10-05",
+      "readingTime": "1 min read",
+      "author": "Therapeutic Coach",
+      "tags": [
+        "meditation",
+        "soundcloud",
+        "audio",
+        "practice"
+      ],
+      "featured": false
+    },
+    {
+      "slug": "guided-meditation-for-transitions",
+      "title": "Guided Meditation for Life Transitions",
+      "excerpt": "A short, grounding meditation to help you navigate change with calm and clarity.",
+      "date": "2024-09-01",
+      "readingTime": "1 min read",
+      "author": "Therapeutic Coach",
+      "tags": [
+        "meditation",
+        "audio",
+        "exercise",
+        "mindfulness"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "building-emotional-resilience",
+      "title": "Building Emotional Resilience: Your Inner Strength Toolkit",
+      "excerpt": "Discover practical tools and strategies to build emotional resilience and navigate life's challenges with greater confidence and stability.",
+      "date": "2024-02-15",
+      "readingTime": "5 min read",
+      "author": "Therapeutic Coach",
+      "tags": [
+        "emotional resilience",
+        "mental health",
+        "coping strategies",
+        "self-care"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "navigating-life-transitions",
+      "title": "Navigating Life Transitions: Finding Your Way Through Change",
+      "excerpt": "Life transitions can be both exciting and overwhelming. Learn practical strategies for navigating change with confidence and clarity.",
+      "date": "2024-02-01",
+      "readingTime": "4 min read",
+      "author": "Therapeutic Coach",
+      "tags": [
+        "life transitions",
+        "change",
+        "resilience",
+        "personal growth"
+      ],
+      "featured": true
+    },
+    {
+      "slug": "understanding-therapeutic-coaching",
+      "title": "Understanding Therapeutic Coaching: A Bridge to Personal Transformation",
+      "excerpt": "Explore what therapeutic coaching is, how it differs from traditional therapy, and why it might be the perfect approach for your personal growth journey.",
+      "date": "2024-01-15",
+      "readingTime": "3 min read",
+      "author": "Therapeutic Coach",
+      "tags": [
+        "therapeutic coaching",
+        "personal growth",
+        "mental health",
+        "transformation"
+      ],
+      "featured": true
+    }
+  ]
+}

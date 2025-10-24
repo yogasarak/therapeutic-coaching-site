@@ -1,20 +1,20 @@
 # Therapeutic Coaching Website
 
-A modern, responsive therapeutic coaching website built with Next.js 15, TypeScript, and styled-components v5. Features include a one-page landing with smooth scroll navigation, MDX blog system, and Vercel deployment optimization.
+A modern, responsive therapeutic coaching website built with Next.js 15, TypeScript, and styled-components v6. Features include a one-page landing with smooth scroll navigation, an MDX-powered blog, and Vercel deployment optimization.
 
 ## 🚀 Features
 
 ### Core Functionality
 - **Responsive One-Page Landing**: Story, services, testimonials, and contact sections
 - **Smart Navigation**: Auto-highlighting sticky nav with mobile hamburger menu
-- **MDX Blog System**: Future-proof blog with support for text, images, and audio content
+- **MDX Blog System**: Hot-swappable posts with front-matter caching, sanitised Markdown, and reusable modal content
 - **Performance Optimized**: Built for fast loading and excellent Lighthouse scores
 - **SEO Ready**: Complete metadata, Open Graph tags, sitemap, and robots.txt
 - **Accessibility First**: WCAG compliant with keyboard navigation and screen reader support
 
 ### Technical Features
 - **Functional Programming Style**: Immutable state, pure components, strict TypeScript
-- **Styled Components**: SSR-optimized with theme provider and global styles
+- **Styled Components**: SSR-optimized with theme provider, registry, and deterministic class names
 - **Security Headers**: Content Security Policy, HTTPS enforcement, and security best practices
 - **Vercel Deployment**: Optimized for free Vercel hosting with automatic deployments
 
@@ -22,8 +22,8 @@ A modern, responsive therapeutic coaching website built with Next.js 15, TypeScr
 
 - **Framework**: Next.js 15.5.0 (App Router)
 - **Language**: TypeScript (strict mode, no `any` types)
-- **Styling**: Styled Components + CSS Variables
-- **Content**: MDX with Gray Matter for frontmatter
+- **Styling**: Styled-components with theme tokens
+- **Content**: MDX (next-mdx-remote) + gray-matter
 - **Deployment**: Vercel
 - **Fonts**: Inter + Merriweather (Google Fonts)
 
@@ -37,7 +37,7 @@ A modern, responsive therapeutic coaching website built with Next.js 15, TypeScr
 
 2. **Install dependencies**
    ```bash
-   npm install
+   npm ci
    ```
 
 3. **Start development server**
@@ -54,52 +54,55 @@ A modern, responsive therapeutic coaching website built with Next.js 15, TypeScr
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── blog/              # Blog pages
-│   ├── globals.css        # Global CSS variables
-│   ├── layout.tsx         # Root layout with styled-components
-│   ├── loading.tsx        # Loading UI
-│   ├── not-found.tsx      # 404 page
-│   ├── page.tsx           # Homepage
-│   ├── robots.ts          # Robots.txt generation
-│   └── sitemap.ts         # Sitemap generation
-├── components/            # React components
-│   ├── Simple*.tsx        # CSS-based simple components
-│   ├── Styled*.tsx        # Styled-components based components
-│   ├── GlobalStyles.tsx   # Global styled-components
-│   └── StyledComponentsRegistry.tsx # SSR registry
+├── app/
+│   ├── blog/                # Blog index + article routes
+│   ├── client-portal/       # Client portal demo
+│   ├── layout.tsx           # Root layout with Styled Components registry
+│   ├── loading.tsx          # Loading state (styled-components)
+│   ├── not-found.tsx        # 404 page (styled-components)
+│   ├── page.tsx             # Landing page
+│   ├── robots.ts            # Robots.txt generation
+│   └── sitemap.ts           # Sitemap generation
+├── components/              # Reusable components & feature modules
+│   ├── mdx/                 # MDX client + RSC component maps
+│   ├── BlogGridPage.tsx     # Blog listing with spotlight modal
+│   └── ...
 ├── content/
-│   └── blog/              # MDX blog posts
-├── server/
-│   └── mdx.server.ts      # Server-side MDX utilities
-├── types/
-│   ├── index.ts           # TypeScript type definitions
-│   └── styled.d.ts        # Styled-components theme types
-└── utils/
-    ├── index.ts           # Utility functions
-    ├── theme.ts           # Design system theme
-    └── mdx.ts             # Client-side MDX utilities
+│   ├── blog/                # Authorable MDX posts
+│   └── spotlights.ts        # Spotlight modal content data
+├── features/                # Portal features (cards, modals, etc.)
+├── lib/
+│   ├── blog.ts              # MDX loader, sanitiser, caching
+│   ├── mdx.ts               # Shared MDX compiler
+│   └── cache/frontmatter.ts # Front-matter snapshot helpers
+├── scripts/                 # Content validation scripts
+├── types/                   # Shared TypeScript types
+└── utils/                   # Theme + utility helpers
 ```
 
 ## 📝 Content Management
 
-### Adding Blog Posts
+### Blog authoring workflow
 
-1. Create a new `.mdx` file in `src/content/blog/`
-2. Add frontmatter:
+1. Create `src/content/blog/<slug>.mdx` with front matter:
    ```yaml
    ---
    title: "Your Blog Post Title"
-   excerpt: "Brief description for SEO and previews"
+   excerpt: "Short SEO + preview copy"
    date: "2024-01-15"
    author: "Therapeutic Coach"
    tags: ["coaching", "personal growth"]
    featured: true
    ---
    ```
-3. Write your content in Markdown/MDX format
-4. Images go in `public/images/`
-5. Audio files go in `public/audio/`
+2. Write Markdown/MDX. Modal callouts are supported via `<button data-modal="true" ...>` etc.
+3. Store referenced assets under `public/images` or `public/audio`.
+4. Run the content validator:
+   ```bash
+   npm run validate:content
+   ```
+   This ensures all local and external assets are resolvable and on approved hosts.
+5. Commit the MDX file (the front-matter snapshot regenerates automatically on the next build).
 
 ### Customizing Content
 
@@ -147,11 +150,15 @@ npm run type-check   # Run TypeScript compiler
 
 ### Development Guidelines
 
-1. **TypeScript**: Use strict types, no `any`, prefer `readonly` arrays
-2. **Components**: Use `React.FC<Props>` with explicit prop interfaces
-3. **Functions**: Keep pure, avoid mutations, use spread operators
-4. **Styling**: Use `as const` for type safety where applicable
-5. **Performance**: Minimize client-side JavaScript, optimize images
+1. **TypeScript**: strict types, `readonly` data, prefer discriminated unions for content data
+2. **Components**: keep server/client components separate; annotate client roots with `'use client'`
+3. **Styling**: Styled-components only; leverage theme tokens and avoid inline styles
+4. **Performance**: use `npm ci`, rely on cached front-matter, keep modals lazy and data-driven
+5. **Testing**: `npm test -- --runInBand` covers MDX compilation, modal flows, and sanitisation
+
+### Further Reading
+
+- [Technical architecture overview](docs/architecture.md)
 
 ### Code Style Examples
 
@@ -202,76 +209,42 @@ The project includes:
 - **SSR/SSG**: Server-side rendering for optimal performance
 - **Compression**: Automatic gzip/brotli compression on Vercel
 
-## 🎵 Embeds & CSP
+## 🎵 Embeds & Audio
 
 - Overview
-  - Embeds (SoundCloud, YouTube, Vimeo) are disabled by default via CSP and HTML sanitization.
-  - To enable an embed provider you must:
-    - Allow the provider in CSP `frame-src` (in `next.config.mjs`).
-    - Allow `<iframe>` and restrict iframe hostnames in the sanitizer (in `src/lib/blog.ts`).
-    - Use safe attributes on iframes (lazy loading, no-referrer, title, etc.).
+  - External embeds (SoundCloud, YouTube, Vimeo) remain opt-in via CSP and HTML sanitization.
+  - Local audio uses the reusable `<AudioPlayer />` component that wraps a native `<audio>` tag for maximum compatibility and zero third-party dependencies.
+  - SoundCloud embeds are registered once in `src/content/media/soundcloudTracks.ts` and reused via `<SoundCloudEmbed />` or `MediaEmbed`.
 
 - CSP (next.config.mjs)
-  - Add provider domains to `frame-src` in both `prodCsp` and `devCsp`:
-    - SoundCloud: `https://w.soundcloud.com`
-    - YouTube: `https://www.youtube.com`
-    - Vimeo: `https://player.vimeo.com`
-  - Example: `frame-src 'self' https://w.soundcloud.com https://www.youtube.com https://player.vimeo.com`
+  - Update `frame-src` when enabling additional iframe providers (YouTube, Vimeo, etc.).
+  - Local audio is served from `/public/audio` and does not require CSP changes.
 
 - Sanitization (src/lib/blog.ts)
-  - The blog renders Markdown to HTML and sanitizes it with `sanitize-html`.
-  - Extend the config to allow iframes and restrict hosts:
-    - `allowedTags: [..., 'iframe']`
-    - `allowedAttributes.iframe: ['src','width','height','allow','allowfullscreen','frameborder','loading','referrerpolicy','title']`
-    - `allowedIframeHostnames: ['w.soundcloud.com','www.youtube.com','player.vimeo.com']`
+  - Markdown is sanitized with `sanitize-html`; allowed iframes are limited to SoundCloud, YouTube, and Vimeo hosts.
+  - `<audio>` tags are allowed by default so the MDX `<AudioPlayer />` renders safely.
 
 - Markdown usage (in .mdx files)
-  - Use provider iframe HTML directly (sanitizer keeps allowed attributes):
-    - SoundCloud:
-      <iframe
-        width="100%"
-        height="166"
-        scrolling="no"
-        frameborder="no"
-        allow="autoplay"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-        title="SoundCloud Player"
-        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/XXXXXXXX"></iframe>
-    - YouTube:
-      <iframe
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/VIDEO_ID"
-        title="YouTube video"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy"
-        referrerpolicy="no-referrer"></iframe>
+  - Import the shared player and track metadata once, then reuse:
+    ```mdx
+    import AudioPlayer from '@/components/AudioPlayer'
+    import { audioTracks } from '@/content/media/audioTracks'
+
+    <AudioPlayer src={audioTracks.transitionMeditation.src} aria-label="Guided meditation" />
+    ```
+- For SoundCloud tracks, register the embed once and drop in the component:
+  ```mdx
+  import SoundCloudEmbed from '@/components/embeds/SoundCloudEmbed'
+
+  <SoundCloudEmbed trackKey="sweetSweetSteep" />
+  ```
+- Example content: the `Meditation: Sweet Sweet Steep` blog post and the matching client-portal card both pull from the same `sweetSweetSteep` track definition.
+  - For iframe providers, continue to paste the embed HTML (sanitizer keeps approved attributes).
 
 - Security notes
-  - Be explicit in `frame-src`; do not use wildcards.
-  - Keep `object-src 'none'` and `base-uri 'self'`.
-  - Sanitizer removes scripts and unknown attributes by default.
-
-### SoundCloud React Component (for pages/components)
-
-- A reusable component is available at `src/components/embeds/SoundCloud.tsx`.
-- Usage in React pages/components (not in Markdown):
-  ```tsx
-  import SoundCloud from '@/components/embeds/SoundCloud'
-
-  // Option 1: provide a SoundCloud track API URL (component builds player URL)
-  <SoundCloud trackUrl="https://api.soundcloud.com/tracks/XXXXXXXX" height={166} />
-
-  // Option 2: provide the full player URL
-  <SoundCloud playerSrc="https://w.soundcloud.com/player/?url=..." height={166} />
-  ```
-
-- Note for blog posts: posts currently render Markdown → sanitized HTML. React components in posts
-  require the MDX component pipeline. If/when you migrate blog rendering to MDX components, you can use
-  `<SoundCloud ... />` directly inside post content.
+  - Keep CSP restrictive (`frame-src 'self' https://www.youtube.com https://player.vimeo.com`).
+  - `object-src 'none'` and `base-uri 'self'` stay enforced.
+  - Sanitizer strips script tags and unexpected attributes by default.
 
 
 ## 📊 Performance & SEO

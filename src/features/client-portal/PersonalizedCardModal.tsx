@@ -1,6 +1,39 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
+import { marked } from 'marked'
+import sanitizeHtml from 'sanitize-html'
+import type { SanitizeOptions } from 'sanitize-html'
+
+marked.setOptions({ gfm: true, breaks: true })
+
+const extendedAllowedTags = Array.from(new Set([
+  ...sanitizeHtml.defaults.allowedTags,
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'blockquote',
+  'iframe',
+]))
+
+const sanitizeOptions: SanitizeOptions = {
+  allowedTags: extendedAllowedTags,
+  allowedAttributes: {
+    ...sanitizeHtml.defaults.allowedAttributes,
+    a: ['href', 'name', 'target', 'rel'],
+    iframe: ['src', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy', 'title', 'scrolling'],
+  },
+  allowedSchemes: ['http', 'https', 'mailto'],
+  transformTags: {
+    a: sanitizeHtml.simpleTransform('a', {
+      rel: 'noopener noreferrer',
+      target: '_blank',
+    }),
+  },
+}
 import Modal from '../modal/Modal'
 import MediaEmbed from '../media/MediaEmbed'
 import { PersonalizedCardData } from './PersonalizedCard'
@@ -11,7 +44,7 @@ import {
   CardMainContent,
   CardMetaInfo,
   CardDate,
-  CardProgress
+  CardProgress,
 } from './PersonalizedCardModal.styles'
 
 interface PersonalizedCardModalProps {
@@ -61,17 +94,24 @@ export const PersonalizedCardModal: React.FC<PersonalizedCardModalProps> = ({
   isOpen,
   onClose
 }) => {
+  const formattedContent = useMemo(() => {
+    if (!card) {
+      return ''
+    }
+
+    const rawHtml = marked.parse(card.content) as string
+    const sanitized = sanitizeHtml(rawHtml, sanitizeOptions)
+
+    if (sanitized.trim().length > 0) {
+      return sanitized
+    }
+
+    const fallback = sanitizeHtml(card.content, { allowedTags: [], allowedAttributes: {} })
+    return fallback ? `<p>${fallback}</p>` : ''
+  }, [card])
+
   if (!card) {
     return null
-  }
-
-  // Convert markdown-like content to HTML (simple implementation)
-  const formatContent = (content: string): string => {
-    return content
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/\n\n/g, '</p><p>')
-      .replace(/\n/g, '<br>')
   }
 
   return (
@@ -98,13 +138,13 @@ export const PersonalizedCardModal: React.FC<PersonalizedCardModalProps> = ({
             mediaType={card.mediaType}
             title={card.title}
             duration={card.mediaDuration}
+            options={card.mediaOptions}
           />
         )}
 
         <CardMainContent
           dangerouslySetInnerHTML={{
-            __html: `<p>${formatContent(card.content)}</p>`
-            // __html: DOMPurify.sanitize(`<p>${formatContent(card.content)}</p>`)
+            __html: formattedContent,
           }}
         />
 

@@ -6,8 +6,8 @@ import BlogGridPage from '@/components/BlogGridPage'
 import { theme } from '@/utils/theme'
 import type { BlogPost } from '@/types'
 
-jest.mock('@/features/client-portal/sampleData', () => ({
-  samplePersonalizedCards: [
+jest.mock('@/content/spotlights', () => ({
+  spotlightPractices: [
     {
       id: 'practice-1',
       title: 'Weekly Reflection Exercise',
@@ -17,6 +17,8 @@ jest.mock('@/features/client-portal/sampleData', () => ({
       type: 'reflection',
       createdDate: '2024-10-01',
       progress: 'Week 2 of 4',
+      mediaUrl: '/audio/weekly-reflection.mp3',
+      mediaType: 'audio',
     },
   ],
 }))
@@ -49,7 +51,8 @@ describe('BlogGridPage', () => {
 
     const dialog = await screen.findByRole('dialog')
     expect(dialog).toBeInTheDocument()
-    expect(within(dialog).getByRole('heading', { name: 'Weekly Reflection Exercise' })).toBeInTheDocument()
+    const headings = within(dialog).getAllByRole('heading', { name: 'Weekly Reflection Exercise' })
+    expect(headings.length).toBeGreaterThan(0)
 
     await userEvent.click(screen.getByRole('button', { name: /close modal/i }))
 

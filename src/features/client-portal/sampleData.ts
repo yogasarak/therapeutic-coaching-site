@@ -1,5 +1,11 @@
 import { PersonalizedCardData } from './PersonalizedCard'
 import { HomeworkChecklistData } from './HomeworkChecklist'
+import { getAudioTrack } from '@/content/media/audioTracks'
+import { getSoundCloudTrack } from '@/content/media/soundcloudTracks'
+
+const transitionMeditationTrack = getAudioTrack('transitionMeditation')
+const confidenceSmallWinsTrack = getAudioTrack('confidenceSmallWins')
+const sweetSteepTrack = getSoundCloudTrack('sweetSweetSteep')
 
 export const samplePersonalizedCards: ReadonlyArray<PersonalizedCardData> = [
   {
@@ -35,7 +41,10 @@ Take a moment to center yourself and reflect on the week that has passed. This e
 **Your Progress:** You've completed 3 out of 4 weekly reflections this month. Keep up the great work!`,
     type: 'reflection',
     createdDate: '2024-02-20',
-    progress: '3/4 completed this month'
+    progress: '3/4 completed this month',
+    mediaUrl: undefined,
+    mediaType: undefined,
+    mediaDuration: undefined
   },
   {
     id: '2',
@@ -74,7 +83,10 @@ This week, focus on confidence in social situations. Practice one small confiden
 *Remember: Every expert was once a beginner. Every confident person had to start somewhere.*`,
     type: 'exercise',
     createdDate: '2024-02-18',
-    progress: 'Day 3 of 7'
+    progress: 'Day 3 of 7',
+    mediaUrl: undefined,
+    mediaType: undefined,
+    mediaDuration: undefined
   },
   {
     id: '3',
@@ -112,9 +124,9 @@ Take a moment to notice how you feel. You might experience:
 *This recording was created specifically for you as part of our therapeutic work together. I encourage you to return to it whenever you need to reconnect with your center.*`,
     type: 'audio',
     createdDate: '2024-02-22',
-    mediaUrl: 'https://soundcloud.com/your-coaching-practice/guided-meditation-inner-peace',
-    mediaType: 'soundcloud',
-    mediaDuration: '10:32',
+    mediaUrl: transitionMeditationTrack.src,
+    mediaType: 'audio',
+    mediaDuration: transitionMeditationTrack.duration,
     progress: 'New session available'
   },
   {
@@ -155,10 +167,46 @@ With encouragement,
 Your Therapeutic Coach`,
     type: 'audio',
     createdDate: '2024-02-19',
-    mediaUrl: 'https://soundcloud.com/your-coaching-practice/weekly-checkin-stress-management',
-    mediaType: 'soundcloud',
-    mediaDuration: '7:45',
+    mediaUrl: confidenceSmallWinsTrack.src,
+    mediaType: 'audio',
+    mediaDuration: confidenceSmallWinsTrack.duration,
     progress: 'Personal message for you'
+  }
+  ,
+  {
+    id: '5',
+    title: 'Meditation: Sweet Sweet Steep',
+    subtitle: 'SoundCloud guided meditation example',
+    description: 'A restorative meditation practice hosted on SoundCloud to demonstrate embedding external audio within the reusable player flow.',
+    content: `**How to Listen**
+
+This meditation is streamed directly from SoundCloud using the reusable audio components.
+
+**Before you begin:**
+- Find a comfortable seated position
+- Silence notifications
+- Take a few grounding breaths
+
+**During the practice:**
+- Follow the gentle cues
+- Allow yourself to relax without expectations
+- Return to the breath if your mind wanders
+
+**After the recording:**
+- Note one word that describes how you feel
+- Jot down any insights that emerged
+- Schedule a reminder to revisit this practice this week
+
+*This card demonstrates how future SoundCloud tracks can be added without creating new components—simply register the track once and reference it here.*`,
+    type: 'audio',
+    createdDate: '2024-10-10',
+    mediaUrl: sweetSteepTrack.embedUrl,
+    mediaType: 'soundcloud',
+    mediaDuration: undefined,
+    progress: 'Streamed via SoundCloud',
+    mediaOptions: {
+      soundcloudTrack: sweetSteepTrack.key,
+    },
   }
 ] as const
 
