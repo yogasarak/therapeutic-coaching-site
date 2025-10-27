@@ -1,36 +1,13 @@
 'use client'
 
 import React from 'react'
-import styled from 'styled-components'
 import BlogHeader from './BlogHeader'
 import BlogSearchBar from './BlogSearchBar'
-
-const TopBarContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
-  margin-bottom: 2rem;
-
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: stretch;
-  }
-`
-
-const HeaderSection = styled.div`
-  flex: 1;
-  min-width: 0; /* Allow shrinking */
-`
-
-const SearchSection = styled.div`
-  flex-shrink: 0;
-
-  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    align-self: stretch;
-  }
-`
+import {
+  HeaderSection,
+  SearchSection,
+  TopBarContainer,
+} from './BlogTopBar.styles'
 
 interface BlogTopBarProps {
   readonly title?: string

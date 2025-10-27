@@ -146,7 +146,22 @@ npm run build        # Build for production
 npm run start        # Start production server
 npm run lint         # Run ESLint
 npm run type-check   # Run TypeScript compiler
+npm run clean:build  # Remove .next, reinstall, rebuild
 ```
+
+### Working with `.next` builds
+
+- The development server (`npm run dev`) watches files and hot-reloads—no need to delete `.next` between edits. Restart only when you change env vars, config (e.g., `next.config.mjs`), or upgrade dependencies.
+- Production builds (`npm run build`) must be re-run whenever you change server logic, static props, MDX content, or environment configuration. This regenerates static pages and bundles.
+- If you suspect stale artifacts (for example after major dependency updates or branch switches), run:
+  ```bash
+  npm run clean:build
+  ```
+  This command deletes the `.next` build directory and then runs `npm run build` for a clean production build.
+  Run once beforehand to make the script executable:
+  ```bash
+  chmod +x scripts/clean-rebuild.sh
+  ```
 
 ### Development Guidelines
 

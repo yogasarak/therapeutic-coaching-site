@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import BlogPostContent from '@/components/BlogPostContent'
 import { getAllPosts, getPostBySlug } from '@/lib/blog'
+import Footer from '@/features/layout/Footer'
+import { defaultSocialLinks } from '@/content/socialLinks'
 
 
 interface BlogPostParams { readonly slug: string }
@@ -63,6 +65,10 @@ const BlogPostPageComponent = async ({ params }: BlogPostPageProps) => {
       <main>
         <BlogPostContent post={post} />
       </main>
+      <Footer
+        socialLinks={defaultSocialLinks}
+        contactEmail="hello@yourcoachingpractice.com"
+      />
     </>
   )
 }

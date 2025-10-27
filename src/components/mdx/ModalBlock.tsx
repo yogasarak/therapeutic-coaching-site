@@ -1,23 +1,14 @@
 "use client"
 
 import React from 'react'
-import styled from 'styled-components'
 import Modal from '@/features/modal/Modal'
+import { Trigger } from './ModalBlock.styles'
 
 interface ModalBlockProps {
   readonly title?: string
   readonly buttonText?: string
   readonly children?: React.ReactNode
 }
-
-const Trigger = styled.button`
-  background: linear-gradient(135deg, ${props => props.theme.colors.primary} 0%, ${props => props.theme.colors.accent} 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  font-weight: 600;
-  border-radius: ${props => props.theme.borderRadius.full};
-`
 
 const ModalBlock: React.FC<ModalBlockProps> = ({ title = 'Details', buttonText = 'Open', children }) => {
   const [open, setOpen] = React.useState(false)
@@ -32,4 +23,3 @@ const ModalBlock: React.FC<ModalBlockProps> = ({ title = 'Details', buttonText =
 }
 
 export default ModalBlock
-

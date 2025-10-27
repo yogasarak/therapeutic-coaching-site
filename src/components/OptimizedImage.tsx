@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
-import styled from 'styled-components'
+import { ImageWrapper } from './OptimizedImage.styles'
 
 type BaseProps = {
   readonly src: string
@@ -25,17 +25,6 @@ type FixedProps = BaseProps & {
 }
 
 type OptimizedImageProps = FillProps | FixedProps
-
-const ImageWrapper = styled.div<{ readonly fill?: boolean }>`
-  position: ${props => props.fill ? 'relative' : 'static'};
-  width: ${props => props.fill ? '100%' : 'auto'};
-  height: ${props => props.fill ? '100%' : 'auto'};
-  
-  img {
-    border-radius: inherit;
-    object-fit: cover;
-  }
-`
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,

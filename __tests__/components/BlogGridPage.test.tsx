@@ -60,4 +60,17 @@ describe('BlogGridPage', () => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     })
   })
+
+  it('filters practice spotlights using the shared search controls', async () => {
+    renderWithTheme(<BlogGridPage posts={posts} />)
+
+    expect(screen.getByRole('button', { name: /view practice/i })).toBeInTheDocument()
+
+    const searchInput = screen.getByLabelText('Search blog posts')
+    await userEvent.type(searchInput, 'nonexistent topic')
+
+    await waitFor(() => {
+      expect(screen.getByText(/no practice spotlights match/i)).toBeInTheDocument()
+    })
+  })
 })

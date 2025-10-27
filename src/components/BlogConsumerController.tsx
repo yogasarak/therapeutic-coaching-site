@@ -1,15 +1,10 @@
 'use client'
 
 import React, { useState, useMemo, useCallback } from 'react'
-import styled from 'styled-components'
 import { BlogPost } from '@/types'
 import BlogHeader from './BlogHeader'
 import BlogSearchInterface from './BlogSearchInterface'
-
-const ConsumerControllerContainer = styled.div`
-  padding-top: 2rem;
-  margin-bottom: 3rem;
-`
+import { ConsumerControllerContainer } from './BlogConsumerController.styles'
 
 interface BlogConsumerControllerProps {
   readonly posts: ReadonlyArray<BlogPost>
@@ -17,6 +12,11 @@ interface BlogConsumerControllerProps {
   readonly title?: string
   readonly subtitle?: string
   readonly onHasActiveFiltersChange?: (hasActive: boolean) => void
+  readonly additionalTags?: ReadonlyArray<string>
+  readonly onFilterCriteriaChange?: (criteria: {
+    readonly searchQuery: string
+    readonly selectedTags: ReadonlyArray<string>
+  }) => void
 }
 
 export const BlogConsumerController: React.FC<BlogConsumerControllerProps> = ({
@@ -25,19 +25,51 @@ export const BlogConsumerController: React.FC<BlogConsumerControllerProps> = ({
   title = "Blog",
   subtitle = "Insights on personal growth, healing, and the therapeutic journey",
   onHasActiveFiltersChange,
+  additionalTags,
+  onFilterCriteriaChange,
 }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTags, setSelectedTags] = useState<ReadonlyArray<string>>([])
   const [isFiltersVisible, setIsFiltersVisible] = useState(false)
 
+  const canonicalizeTag = useCallback((value: string): string | null => {
+    const normalized = value.trim().toLowerCase()
+    if (!normalized) {
+      return null
+    }
+
+    if (normalized === 'audio session' || normalized === 'soundcloud') {
+      return 'audio'
+    }
+
+    return normalized
+  }, [])
+
   // Get all unique tags from posts
   const allTags = useMemo(() => {
-    const tagSet = new Set<string>()
+    const tagMap = new Map<string, string>()
+    const addTag = (value: string) => {
+      const canonical = canonicalizeTag(value)
+      if (!canonical) {
+        return
+      }
+      if (!tagMap.has(canonical)) {
+        tagMap.set(canonical, canonical)
+      }
+    }
+
     posts.forEach(post => {
-      post.tags.forEach(tag => tagSet.add(tag))
+      post.tags.forEach(addTag)
     })
-    return Array.from(tagSet).sort()
-  }, [posts])
+    additionalTags?.forEach(addTag)
+
+    return Array.from(tagMap.values()).sort()
+  }, [posts, additionalTags, canonicalizeTag])
+
+  const displayTags = useMemo(
+    () => allTags.filter(tag => tag !== 'modal'),
+    [allTags]
+  )
 
   // Filter posts based on search query and selected tags
   const filteredPosts = useMemo(() => {
@@ -56,10 +88,12 @@ export const BlogConsumerController: React.FC<BlogConsumerControllerProps> = ({
     // Filter by selected tags
     if (selectedTags.length > 0) {
       filtered = filtered.filter(post =>
-        selectedTags.some(selectedTag =>
-          post.tags.some(postTag => 
-            postTag.toLowerCase() === selectedTag.toLowerCase()
+        selectedTags.some(selectedTag => {
+          const normalizedSelected = selectedTag.toLowerCase()
+          return post.tags.some(postTag => 
+            postTag.toLowerCase() === normalizedSelected
           )
+        }
         )
       )
     }
@@ -72,20 +106,32 @@ export const BlogConsumerController: React.FC<BlogConsumerControllerProps> = ({
     onFilteredPostsChange(filteredPosts)
   }, [filteredPosts, onFilteredPostsChange])
 
+  // Surface current filter criteria to parent consumers
+  React.useEffect(() => {
+    onFilterCriteriaChange?.({
+      searchQuery,
+      selectedTags,
+    })
+  }, [searchQuery, selectedTags, onFilterCriteriaChange])
+
   const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value)
   }, [])
 
   const handleTagToggle = useCallback((tag: string) => {
+    const normalizedTag = canonicalizeTag(tag)
+    if (!normalizedTag) {
+      return
+    }
     setSelectedTags(prev => {
-      const isSelected = prev.includes(tag)
+      const isSelected = prev.includes(normalizedTag)
       if (isSelected) {
-        return prev.filter(t => t !== tag)
+        return prev.filter(t => t !== normalizedTag)
       } else {
-        return [...prev, tag]
+        return [...prev, normalizedTag]
       }
     })
-  }, [])
+  }, [canonicalizeTag])
 
   const handleClearFilters = useCallback(() => {
     setSearchQuery('')
@@ -109,7 +155,7 @@ export const BlogConsumerController: React.FC<BlogConsumerControllerProps> = ({
       <BlogSearchInterface
         searchValue={searchQuery}
         onSearchChange={handleSearchChange}
-        availableTags={allTags}
+        availableTags={displayTags}
         selectedTags={selectedTags}
         onTagToggle={handleTagToggle}
         onClearFilters={handleClearFilters}
