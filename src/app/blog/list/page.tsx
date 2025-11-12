@@ -3,6 +3,8 @@ import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import { BlogListPage } from '@/components/BlogComponents'
 import { getAllPosts } from '@/lib/blog'
+import Footer from '@/features/layout/Footer'
+import { defaultSocialLinks } from '@/content/socialLinks'
 
 
 export const metadata: Metadata = {
@@ -25,6 +27,10 @@ const BlogListViewPage = () => {
       <main>
         <BlogListPage posts={posts} showViewToggle={true} />
       </main>
+      <Footer
+        socialLinks={defaultSocialLinks}
+        contactEmail="hello@yourcoachingpractice.com"
+      />
     </>
   )
 }

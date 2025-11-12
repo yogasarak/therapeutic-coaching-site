@@ -11,7 +11,8 @@
     "test": "node ./node_modules/jest/bin/jest.js",
     "test:watch": "node ./node_modules/jest/bin/jest.js --watch",
     "test:ci": "node ./node_modules/jest/bin/jest.js --ci",
-    "validate:content": "node scripts/validate-content.js"
+    "validate:content": "node scripts/validate-content.js",
+    "clean:build": "bash scripts/clean-rebuild.sh"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",

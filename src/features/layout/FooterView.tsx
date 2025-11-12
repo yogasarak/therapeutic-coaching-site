@@ -2,7 +2,6 @@
 
 import React from 'react'
 import SocialIcons, { type SocialLink } from '../social/SocialIcons'
-import styled from 'styled-components'
 import {
   FooterContainer,
   FooterContent,

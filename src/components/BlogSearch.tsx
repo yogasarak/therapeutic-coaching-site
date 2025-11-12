@@ -1,15 +1,11 @@
 'use client'
 
 import React, { useState, useMemo, useCallback } from 'react'
-import styled from 'styled-components'
 import { BlogPost } from '@/types'
 import SearchInput from './SearchInput'
 import TagFilter from './TagFilter'
 import SearchResults from './SearchResults'
-
-const SearchContainer = styled.div`
-  margin-bottom: 3rem;
-`
+import { SearchContainer } from './BlogSearch.styles'
 
 interface BlogSearchProps {
   readonly posts: ReadonlyArray<BlogPost>
