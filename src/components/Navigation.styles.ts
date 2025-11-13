@@ -7,6 +7,7 @@ export const NavContainer = styled.nav<{ readonly $isScrolled: boolean }>`
   left: 0;
   right: 0;
   z-index: 1000;
+  min-height: 60px;
   background-color: ${props =>
     props.$isScrolled
       ? 'rgba(255, 255, 255, 0.95)'
@@ -117,7 +118,10 @@ export const MobileMenuButtonActive = styled(MobileMenuButton)<{ readonly $isOpe
 
 export const MobileNav = styled.div<{ readonly $isOpen: boolean }>`
   position: fixed;
-  top: 100%;
+  top: 60px;
+  @supports (top: calc(60px + env(safe-area-inset-top))) {
+    top: calc(60px + env(safe-area-inset-top));
+  }
   left: 0;
   right: 0;
   background-color: rgba(255, 255, 255, 0.98);

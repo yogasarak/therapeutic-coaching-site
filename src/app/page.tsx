@@ -8,15 +8,16 @@ import TestimonialsSection from '@/components/TestimonialsSection'
 import BlogSection from '@/components/BlogSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/features/layout/Footer'
+import SiteIntroModal from '@/features/modal/SiteIntroModalWrapper'
 import { getFeaturedPosts } from '@/lib/blog'
 import { defaultSocialLinks } from '@/content/socialLinks'
-
 
 const HomePage = () => {
   const featuredPosts = getFeaturedPosts()
 
   return (
     <>
+      <SiteIntroModal />
       <SkipLinks />
       <Navigation />
       <main id="main-content">
