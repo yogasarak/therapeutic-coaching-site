@@ -1,4 +1,8 @@
-const rawBase = (process.env.NEXT_PUBLIC_SUPABASE_ASSET_BASE ?? 'https://asgngaofemmqdyjcetkm.supabase.co/storage/v1/object/public/therapeutic%20nexus%20images').trim()
+const rawBase = process.env.NEXT_PUBLIC_SUPABASE_ASSET_BASE?.trim()
+
+if (!rawBase) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_ASSET_BASE environment variable.')
+}
 
 const SUPABASE_ASSET_BASE = rawBase.endsWith('/')
   ? rawBase.slice(0, -1)

@@ -4,7 +4,16 @@ import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 const isProd = process.env.NODE_ENV === 'production'
-const supabaseAssetBase = (process.env.NEXT_PUBLIC_SUPABASE_ASSET_BASE ?? 'https://asgngaofemmqdyjcetkm.supabase.co/storage/v1/object/public/therapeutic%20nexus%20images').trim()
+const rawSupabaseBase = process.env.NEXT_PUBLIC_SUPABASE_ASSET_BASE
+const supabaseAssetBase = rawSupabaseBase
+  ? rawSupabaseBase.trim()
+  : isProd
+    ? undefined
+    : 'https://asgngaofemmqdyjcetkm.supabase.co/storage/v1/object/public/therapeutic%20nexus%20images'
+
+if (!supabaseAssetBase) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_ASSET_BASE environment variable.')
+}
 const supabaseUrl = new URL(supabaseAssetBase.endsWith('/') ? supabaseAssetBase : `${supabaseAssetBase}/`)
 const supabaseImageOrigin = supabaseUrl.origin
 
