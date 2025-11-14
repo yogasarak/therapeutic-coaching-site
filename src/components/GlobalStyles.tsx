@@ -3,6 +3,14 @@
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyles = createGlobalStyle`
+  @font-face {
+    font-family: 'BLMelodyMono';
+    src: url('/BLMelodyMono-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
   * {
     margin: 0;
     padding: 0;

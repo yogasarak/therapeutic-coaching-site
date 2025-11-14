@@ -101,26 +101,26 @@ export const TextArea = styled.textarea`
 `
 
 export const SubmitButton = styled.button<{ readonly $isSubmitting: boolean }>`
-  background: linear-gradient(
-    135deg,
-    ${props => props.theme.colors.primary} 0%,
-    ${props => props.theme.colors.accent} 100%
-  );
-  color: white;
+  background: linear-gradient(135deg, #FFBF91 0%, #FBCBFF 35%, #FFE3D4 70%, #FFEC8A 100%);
+  color: ${props => props.theme.colors.text};
   border: none;
   padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.xl};
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  border-radius: ${props => props.theme.borderRadius.md};
+  border-radius: ${props => props.theme.borderRadius.full};
   cursor: ${props => (props.$isSubmitting ? 'not-allowed' : 'pointer')};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: ${props =>
+    props.$isSubmitting
+      ? 'none'
+      : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'};
   @media (prefers-reduced-motion: reduce) { transition: none; }
-  box-shadow: ${props => props.theme.shadows.sm};
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   opacity: ${props => (props.$isSubmitting ? '0.7' : '1')};
   
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: ${props => props.theme.shadows.md};
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    color: ${props => props.theme.colors.text};
   }
   
   &:active:not(:disabled) {
@@ -166,20 +166,26 @@ export const ContactItem = styled.div`
 `
 
 export const ContactIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(
-    135deg,
-    ${props => props.theme.colors.primary} 0%,
-    ${props => props.theme.colors.accent} 100%
-  );
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #FFBF91 0%, #FBCBFF 35%, #FFE3D4 70%, #FFEC8A 100%);
   border-radius: ${props => props.theme.borderRadius.full};
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.2rem;
+  color: ${props => props.theme.colors.primary};
   flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  &:hover {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  }
 `
 
 export const ContactText = styled.div`

@@ -47,8 +47,32 @@ export const HeroContent = styled.div`
 export const HeroText = styled.div`
   h1 {
     color: ${props => props.theme.colors.text};
+    font-family: ${props => props.theme.fonts.primary};
     margin-bottom: ${props => props.theme.spacing.md};
     line-height: 1.1;
+    font-size: clamp(2.3rem, 1vw + 2.2rem, 3rem);
+    display: inline-flex;
+    flex-direction: column;
+    gap: ${props => props.theme.spacing.xs};
+
+    @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+      font-size: 2.1rem;
+      line-height: 1.2;
+    }
+  }
+
+  .hero-title-mobile {
+    display: none;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    .hero-title-full {
+      display: none;
+    }
+
+    .hero-title-mobile {
+      display: block;
+    }
   }
 
   p {
@@ -56,16 +80,21 @@ export const HeroText = styled.div`
     color: ${props => props.theme.colors.textMuted};
     margin-bottom: ${props => props.theme.spacing.xl};
     max-width: 500px;
+
+    @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+      font-size: 1.05rem;
+      margin-bottom: ${props => props.theme.spacing.lg};
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 `
 
+const brandGradient = 'linear-gradient(135deg, #FFBF91 0%, #FBCBFF 35%, #FFE3D4 70%, #FFEC8A 100%)'
+
 export const CTAButton = styled.button`
-  background: linear-gradient(
-    135deg,
-    ${props => props.theme.colors.primary} 0%,
-    ${props => props.theme.colors.accent} 100%
-  );
-  color: white;
+  background: ${brandGradient};
+  color: ${props => props.theme.colors.text};
   border: none;
   padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.xl};
   font-size: 1.1rem;
@@ -77,15 +106,21 @@ export const CTAButton = styled.button`
       ? 'none'
       : 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
   };
-  box-shadow: ${props => props.theme.shadows.md};
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   
   &:hover {
     transform: ${props => (isReducedMotion() ? 'none' : 'translateY(-2px)')};
-    box-shadow: ${props => props.theme.shadows.lg};
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    color: ${props => props.theme.colors.text};
   }
   
   &:active {
     transform: ${props => (isReducedMotion() ? 'none' : 'translateY(0)')};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.lg};
+    font-size: 0.95rem;
   }
 `
 

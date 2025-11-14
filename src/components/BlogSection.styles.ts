@@ -122,31 +122,23 @@ export const ViewAllLink = styled(Link)`
   display: inline-flex;
   align-items: center;
   gap: ${props => props.theme.spacing.xs};
-  background: linear-gradient(
-    135deg,
-    ${props => props.theme.colors.primary} 0%,
-    ${props => props.theme.colors.accent} 100%
-  );
-  color: white;
-  padding: ${props => props.theme.spacing.md} ${props => props.theme.spacing.xl};
+  background: linear-gradient(135deg, #FFBF91 0%, #FBCBFF 35%, #FFE3D4 70%, #FFEC8A 100%);
+  color: ${props => props.theme.colors.text};
+  padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.lg};
   border-radius: ${props => props.theme.borderRadius.full};
   font-weight: 600;
   margin-top: ${props => props.theme.spacing.xl};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: ${props => props.theme.shadows.sm};
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: ${props => props.theme.shadows.md};
-    color: white;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    color: ${props => props.theme.colors.text};
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-
-    &:hover {
-      transform: none;
-    }
+  &:active {
+    transform: translateY(0);
   }
 `
 
