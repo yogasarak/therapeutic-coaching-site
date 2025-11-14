@@ -4,7 +4,7 @@ Therapeutic Coaching Website is a production-ready Next.js 15 + TypeScript + sty
 
 It doubles as an advanced Next.js App Router showcase: server actions, hardened CSP/HSTS headers, cached MDX pipelines, a styled-components SSR registry, Jest coverage, and automation for content validation plus clean rebuilds, giving nontechnical practitioners a turnkey experience while engineers can inspect the architectural depth.
 
-![Therapeutic Nexus preview](public/images/therapeutic-nexus.png)
+![Therapeutic Nexus preview](https://asgngaofemmqdyjcetkm.supabase.co/storage/v1/object/public/therapeutic%20nexus%20images/therapeutic-nexus.png)
 
 
 ## Features
@@ -120,6 +120,7 @@ src/
 - The route handler at `/api/protected-images/[...assetPath]` streams files only when the request includes the `ASSET_ACCESS_TOKEN`.
 - Set `ASSET_ACCESS_TOKEN` in your environment (Vercel → Environment Variables) and supply it via the `x-protected-token` header or `?token=` query when requesting an asset.
 - Keep in mind: files committed to a public repo remain visible via Git history—move private media out of version control to keep them truly private.
+- Public-facing assets (logo, favicons, preview image) are served from Supabase Storage. Set `NEXT_PUBLIC_SUPABASE_ASSET_BASE` (e.g. `https://<project>.supabase.co/storage/v1/object/public/<bucket>`) so the app can build the correct URLs.
 
 ### Customizing Content
 
