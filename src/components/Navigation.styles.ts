@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import styled from 'styled-components'
 
@@ -11,7 +12,7 @@ export const NavContainer = styled.nav<{ readonly $isScrolled: boolean }>`
   background-color: ${props =>
     props.$isScrolled
       ? 'rgba(255, 255, 255, 0.95)'
-      : 'rgba(255, 255, 255, 0.1)'
+      : 'transparent'
   };
   backdrop-filter: ${props => (props.$isScrolled ? 'blur(10px)' : 'none')};
   border-bottom: ${props =>
@@ -38,20 +39,50 @@ export const NavWrapper = styled.div`
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
     padding: 0 ${props => props.theme.spacing.md};
+    justify-content: flex-end;
   }
 `
 
 export const Logo = styled(Link)`
-  font-family: ${props => props.theme.fonts.secondary};
+  display: inline-flex;
+  align-items: center;
+  gap: ${props => props.theme.spacing.sm};
+  font-family: ${props => props.theme.fonts.primary};
   font-size: 1.5rem;
   font-weight: 700;
   color: ${props => props.theme.colors.primary};
   text-decoration: none;
   transition: color 0.2s ease;
   @media (prefers-reduced-motion: reduce) { transition: none; }
+  line-height: 1;
 
   &:hover {
-    color: ${props => props.theme.colors.accent};
+    color: ${props => props.theme.colors.primary};
+  }
+
+  &:focus-visible {
+    color: ${props => props.theme.colors.primary};
+  }
+
+  span {
+    display: inline-block;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    display: none;
+  }
+`
+
+export const LogoIcon = styled(Image)`
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+  background-color: transparent;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    width: 28px;
+    height: 28px;
   }
 `
 
@@ -133,6 +164,10 @@ export const MobileNav = styled.div<{ readonly $isOpen: boolean }>`
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   @media (prefers-reduced-motion: reduce) { transition: none; }
   z-index: 999;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+  padding-bottom: env(safe-area-inset-bottom);
 
   @media (min-width: ${props => props.theme.breakpoints.tablet}) {
     display: none;
@@ -145,7 +180,15 @@ export const MobileNavList = styled.ul`
   padding: ${props => props.theme.spacing.lg};
   display: flex;
   flex-direction: column;
-  gap: ${props => props.theme.spacing.md};
+  gap: 0;
+
+  li {
+    padding: ${props => props.theme.spacing.sm} 0;
+  }
+
+  li + li {
+    border-top: 1px solid ${props => props.theme.colors.border};
+  }
 `
 
 export const NavLink = styled.button<{ readonly $isActive: boolean }>`
@@ -164,6 +207,8 @@ export const NavLink = styled.button<{ readonly $isActive: boolean }>`
   position: relative;
   transition: color 0.2s ease;
   @media (prefers-reduced-motion: reduce) { transition: none; }
+  text-align: left;
+  width: 100%;
 
   &:hover {
     color: ${props => props.theme.colors.primary};
@@ -183,5 +228,14 @@ export const NavLink = styled.button<{ readonly $isActive: boolean }>`
 
   &:hover::after {
     width: 100%;
+  }
+
+  @media (min-width: ${props => props.theme.breakpoints.tablet}) {
+    width: auto;
+    text-align: center;
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    font-size: 1.1rem;
   }
 `

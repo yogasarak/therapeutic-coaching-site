@@ -106,21 +106,27 @@ export const CloseButton = styled.button`
   line-height: 1;
 
   transition: transform 0.2s ease, color 0.2s ease;
+  outline: none;
 
   &:hover {
     color: ${props => props.theme.colors.text};
     transform: translateY(-1px);
   }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
 `
 
 export const ModalContent = styled.div`
-  padding: 2rem;
+  padding: 1.25rem 2rem 2rem;
   overflow-y: auto;
   flex: 1;
   min-height: 0;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: 1rem 1.5rem 1.5rem;
   }
 `
 

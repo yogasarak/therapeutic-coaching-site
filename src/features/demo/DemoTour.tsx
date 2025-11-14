@@ -18,6 +18,8 @@ import {
   TourContainer,
   TourContent,
   TourPrompt,
+  TourButtonWrapper,
+  Sparkle,
   ActionLink,
 } from './DemoTour.styles'
 import Modal from '@/features/modal/Modal'
@@ -46,6 +48,7 @@ const DemoTour: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
   const [showPrompt, setShowPrompt] = useState(false)
+  const [hasOpened, setHasOpened] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -115,13 +118,6 @@ const DemoTour: React.FC = () => {
       ],
       actions: [
         { label: 'Open Client Portal', href: '/client-portal' },
-        {
-          label: 'Open Live Portal Demo',
-          href: 'https://therapeutic-coaching-site.vercel.app/client-portal',
-          target: '_blank',
-          rel: 'noopener noreferrer',
-          external: true,
-        },
       ],
     },
     {
@@ -142,20 +138,6 @@ const DemoTour: React.FC = () => {
           rel: 'noopener noreferrer',
           external: true,
         },
-        {
-          label: 'Launch Live Site',
-          href: 'https://therapeutic-coaching-site.vercel.app/',
-          target: '_blank',
-          rel: 'noopener noreferrer',
-          external: true,
-        },
-        {
-          label: 'Open Client Portal Demo',
-          href: 'https://therapeutic-coaching-site.vercel.app/client-portal',
-          target: '_blank',
-          rel: 'noopener noreferrer',
-          external: true,
-        },
       ],
     },
   ], [])
@@ -164,6 +146,7 @@ const DemoTour: React.FC = () => {
     setIsOpen(true)
     setActiveStep(0)
     setShowPrompt(false)
+    setHasOpened(true)
     try {
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(TOUR_PROMPT_STORAGE_KEY, 'true')
@@ -189,6 +172,19 @@ const DemoTour: React.FC = () => {
 
   const isFirstStep = activeStep === 0
   const isLastStep = activeStep === steps.length - 1
+  const showSparkles = !hasOpened
+
+  const sparkles = useMemo(
+    () => [
+      { id: 'sparkle-top-right', style: { top: '-18px', right: '-10px' }, delay: 0, duration: 1.8 },
+      { id: 'sparkle-top-left', style: { top: '-12px', left: '-16px' }, delay: 0.4, duration: 2 },
+      { id: 'sparkle-right', style: { top: '18px', right: '-22px' }, delay: 0.8, duration: 2.2 },
+      { id: 'sparkle-left', style: { bottom: '10px', left: '-26px' }, delay: 1.2, duration: 2 },
+      { id: 'sparkle-bottom', style: { bottom: '-18px', right: '46px' }, delay: 1.6, duration: 1.9 },
+      { id: 'sparkle-bottom-left', style: { bottom: '-12px', left: '12px' }, delay: 2, duration: 2.3 },
+    ],
+    []
+  )
 
   return (
     <>
@@ -198,9 +194,22 @@ const DemoTour: React.FC = () => {
             Take a quick tour to see how coaches and clients experience this UI kit and grab the repo + live demos.
           </TourPrompt>
         )}
-        <TourButton type="button" onClick={handleOpen} aria-haspopup="dialog">
-          ✨ Guided Tour
-        </TourButton>
+        <TourButtonWrapper>
+          {showSparkles && sparkles.map(sparkle => (
+            <Sparkle
+              key={sparkle.id}
+              $delay={sparkle.delay}
+              $duration={sparkle.duration}
+              style={sparkle.style}
+              aria-hidden="true"
+            >
+              ✨
+            </Sparkle>
+          ))}
+          <TourButton type="button" onClick={handleOpen} aria-haspopup="dialog">
+            Guided Tour
+          </TourButton>
+        </TourButtonWrapper>
       </TourContainer>
 
       <Modal
@@ -213,13 +222,6 @@ const DemoTour: React.FC = () => {
               Step {activeStep + 1} of {steps.length}
             </StepProgress>
             <FooterControls>
-              <FooterButton
-                type="button"
-                onClick={handleClose}
-                $variant="ghost"
-              >
-                Close
-              </FooterButton>
               {!isFirstStep && (
                 <FooterButton type="button" onClick={handlePrev} $variant="ghost">
                   Previous

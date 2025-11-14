@@ -7,6 +7,7 @@ import { scrollToSection, throttle } from '@/utils'
 import {
   DesktopNav,
   Logo,
+  LogoIcon,
   MobileMenuButtonActive,
   MobileNav,
   MobileNavList,
@@ -148,8 +149,18 @@ const Navigation: React.FC = () => {
     <>
       <NavContainer id="navigation" $isScrolled={isScrolled} role="navigation" aria-label="Main navigation">
         <NavWrapper>
-          <Logo href="/">Therapeutic Coaching</Logo>
-          
+          <Logo href="/">
+            <LogoIcon
+              src="/images/logo.png"
+              alt="Therapeutic Coaching logo"
+              width={32}
+              height={32}
+              priority
+              sizes="32px"
+            />
+            <span>Therapeutic Coaching</span>
+          </Logo>
+
           <DesktopNav>
             {navigationSections.map(section => (
               <li key={section.id}>

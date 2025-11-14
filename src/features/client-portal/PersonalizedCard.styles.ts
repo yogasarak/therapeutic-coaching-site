@@ -36,12 +36,16 @@ export const CardBadges = styled.div`
 `
 
 export const CardBadge = styled.div<{ readonly $type: 'personal' | 'exercise' | 'reflection' | 'goal' | 'audio' }>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.25rem 0.75rem;
   border-radius: ${props => props.theme.borderRadius.full};
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  line-height: 1;
   
   ${props => {
     switch (props.$type) {

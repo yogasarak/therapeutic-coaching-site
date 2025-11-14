@@ -20,7 +20,10 @@ const HeroSection: React.FC = () => {
     <HeroContainer id="home">
       <HeroContent>
         <HeroText>
-          <h1>Transform Your Life Through Therapeutic Coaching</h1>
+          <h1>
+            <span className="hero-title-full">Transform Your Life Through Therapeutic Coaching</span>
+            <span className="hero-title-mobile">Therapeutic Coaching</span>
+          </h1>
           <p>
             Discover your inner strength, overcome life&apos;s challenges, and create 
             lasting positive change with personalized therapeutic coaching designed 

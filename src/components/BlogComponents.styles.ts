@@ -132,22 +132,23 @@ export const CardLink = styled(Link)`
 `
 
 export const PrimaryLinkButton = styled(Link)`
-  background: linear-gradient(135deg, ${props => props.theme.colors.primary} 0%, ${props => props.theme.colors.accent} 100%);
-  color: white;
+  background: linear-gradient(135deg, #FFBF91 0%, #FBCBFF 35%, #FFE3D4 70%, #FFEC8A 100%);
+  color: ${props => props.theme.colors.text};
   border: none;
-  padding: 1.5rem 3rem;
-  font-size: 1.1rem;
+  padding: 1.25rem 2.75rem;
+  font-size: 1.05rem;
   font-weight: 600;
   border-radius: 9999px;
   text-decoration: none;
   display: inline-block;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    color: ${props => props.theme.colors.text};
   }
 
   &:active {

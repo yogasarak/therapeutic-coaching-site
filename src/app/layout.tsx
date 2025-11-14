@@ -4,6 +4,7 @@ import ClientThemeProvider from '@/components/ClientThemeProvider'
 import BackToTop from '@/components/BackToTop'
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 import DemoTour from '@/features/demo/DemoTourWrapper'
+import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,9 +25,14 @@ export const metadata: Metadata = {
     canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app',
   },
   icons: {
-    icon: '/images/favicon.png',
-    shortcut: '/images/favicon.png',
-    apple: '/images/favicon.png',
+    icon: [
+      { url: '/images/favicon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/images/favicon.png', type: 'image/png', sizes: '192x192' },
+    ],
+    shortcut: ['/images/favicon.png'],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   title: {
     default: 'Therapeutic Coaching | Transform Your Life',
@@ -84,6 +90,7 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => {
             <DemoTour />
             {children}
             <BackToTop />
+            <Analytics />
           </ClientThemeProvider>
         </StyledComponentsRegistry>
       </body>
