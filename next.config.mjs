@@ -11,9 +11,6 @@ const devCsp = `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-ev
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
-  devIndicators: {
-    buildActivityPosition: 'bottom-right',
-  },
   compiler: {
     styledComponents: {
       displayName: true,
