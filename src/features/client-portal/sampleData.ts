@@ -92,7 +92,7 @@ This week, focus on confidence in social situations. Practice one small confiden
     id: '3',
     title: 'Guided Meditation: Finding Inner Peace',
     subtitle: 'A calming 10-minute guided meditation',
-    description: 'This peaceful guided meditation will help you center yourself, release tension, and connect with your inner calm. Perfect for daily practice.',
+    description: 'This peaceful guided meditation streams from SoundCloud to help you center yourself, release tension, and connect with your inner calm.',
     content: `**Welcome to Your Guided Meditation Practice**
 
 This 10-minute guided meditation is designed to help you find your center and cultivate inner peace in your daily life.
@@ -111,6 +111,8 @@ This 10-minute guided meditation is designed to help you find your center and cu
 3. **Close your eyes** or soften your gaze
 4. **Press play** and let my voice guide you
 
+This practice streams directly from SoundCloud—the same meditation featured in the blog—so you can revisit it anywhere.
+
 **After Your Practice:**
 
 Take a moment to notice how you feel. You might experience:
@@ -124,10 +126,13 @@ Take a moment to notice how you feel. You might experience:
 *This recording was created specifically for you as part of our therapeutic work together. I encourage you to return to it whenever you need to reconnect with your center.*`,
     type: 'audio',
     createdDate: '2024-02-22',
-    mediaUrl: transitionMeditationTrack.src,
-    mediaType: 'audio',
-    mediaDuration: transitionMeditationTrack.duration,
-    progress: 'New session available'
+    mediaUrl: sweetSteepTrack.embedUrl,
+    mediaType: 'soundcloud',
+    mediaDuration: undefined,
+    progress: 'Streamed via SoundCloud',
+    mediaOptions: {
+      soundcloudTrack: sweetSteepTrack.key,
+    },
   },
   {
     id: '4',

@@ -5,15 +5,17 @@ export const PlayerWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   border-radius: ${props => props.theme.borderRadius.md};
-  overflow: hidden;
-  background: ${props => props.theme.colors.surface || props.theme.colors.background};
+  overflow: visible;
+  background: transparent;
 `
 
 export const PlayerFrame = styled.iframe<{ readonly $height: number }>`
   width: 100%;
+  display: block;
   border: 0;
   height: ${props => `${props.$height}px`};
   min-height: ${props => `${props.$height}px`};
+  max-height: none;
 `
 
 export const Attribution = styled.div`

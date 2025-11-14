@@ -5,7 +5,7 @@ export const MediaContainer = styled.div`
   width: 100%;
   margin: 1.5rem 0;
   border-radius: ${props => props.theme.borderRadius.lg};
-  overflow: hidden;
+  overflow: visible;
   background: ${props => props.theme.colors.surface || props.theme.colors.background};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `

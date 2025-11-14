@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import crypto from 'crypto'
 import matter from 'gray-matter'
 import readingTime from 'reading-time'
 import sanitizeHtml from 'sanitize-html'
@@ -14,7 +15,15 @@ const postsDirectory = path.join(process.cwd(), 'src/content/blog')
 
 let cachedPosts: ReadonlyArray<BlogPost> | null = null
 let cachedMtime = 0
-const compiledPostCache = new Map<string, ReactElement>()
+interface CompiledPostCacheEntry {
+  readonly hash: string
+  readonly content: ReactElement
+}
+
+const compiledPostCache = new Map<string, CompiledPostCacheEntry>()
+
+const hashContent = (value: string): string =>
+  crypto.createHash('sha256').update(value).digest('hex')
 
 const getDirectoryMtime = (): number => {
   try {
@@ -92,6 +101,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents)
+    const contentHash = hashContent(fileContents)
     
     const readingTimeResult = readingTime(content)
 
@@ -117,7 +127,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
         ],
         audio: ['controls', 'src'],
         source: ['src', 'type'],
-        iframe: ['src', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy', 'title'],
+        iframe: ['src', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy', 'title', 'scrolling'],
         button: [
           ...((sanitizeHtml.defaults.allowedAttributes.button as ReadonlyArray<string> | undefined) || []),
           'type',
@@ -146,11 +156,14 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
       },
     })
 
-    let compiled = compiledPostCache.get(slug)
-    if (!compiled) {
+    let compiledEntry = compiledPostCache.get(slug)
+    if (!compiledEntry || compiledEntry.hash !== contentHash) {
       const { content: mdxContent } = await compileBlogMdx(content)
-      compiled = mdxContent
-      compiledPostCache.set(slug, compiled)
+      compiledEntry = {
+        hash: contentHash,
+        content: mdxContent,
+      }
+      compiledPostCache.set(slug, compiledEntry)
     }
 
     return {
@@ -162,7 +175,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
       author: data.author || 'Therapeutic Coach',
       tags: (data.tags || []) as ReadonlyArray<string>,
       contentHtml: sanitizedHtml,
-      contentMdx: compiled,
+      contentMdx: compiledEntry.content,
       featured: data.featured || false,
     }
   } catch (error) {

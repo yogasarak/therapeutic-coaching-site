@@ -31,6 +31,7 @@ const SoundCloudEmbed: React.FC<SoundCloudEmbedProps> = ({
       <PlayerFrame
         src={track.embedUrl}
         title={title}
+        height={frameHeight}
         scrolling="no"
         allow="autoplay"
         loading="lazy"

@@ -7,10 +7,11 @@ tags: ["meditation", "audio", "exercise", "mindfulness"]
 featured: true
 ---
 
-import AudioPlayer from '@/components/AudioPlayer'
-import { audioTracks } from '@/content/media/audioTracks'
+import SoundCloudEmbed from '@/components/embeds/SoundCloudEmbed'
 
 Change can feel unsettling. This short practice helps you ground in the body, soften anxious thinking, and reconnect with your values.
+
+> This meditation streams directly from SoundCloud so you can revisit it across the blog, practice spotlights, and client portal.
 
 ## What you’ll need
 
@@ -20,9 +21,9 @@ Change can feel unsettling. This short practice helps you ground in the body, so
 
 ## Listen
 
-<AudioPlayer
-  src={audioTracks.transitionMeditation.src}
-  aria-label="Guided meditation audio"
+<SoundCloudEmbed
+  trackKey="sweetSweetSteep"
+  title="Guided Meditation – Sweet Sweet Steep"
 />
 
 If the player doesn’t load, try refreshing the page, or check your connection.
