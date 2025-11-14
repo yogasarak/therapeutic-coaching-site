@@ -2,19 +2,19 @@ import styled from 'styled-components'
 
 export const BackToTopButton = styled.button<{ readonly $isVisible: boolean }>`
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 1.75rem;
+  left: 1.5rem;
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2D5A87 0%, #F4A460 100%);
-  color: white;
+  background: linear-gradient(135deg, #FFBF91 0%, #FBCBFF 35%, #FFE3D4 70%, #FFEC8A 100%);
+  color: ${props => props.theme.colors.primary};
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
   opacity: ${props => (props.$isVisible ? 1 : 0)};
   visibility: ${props => (props.$isVisible ? 'visible' : 'hidden')};
   transform: ${props => (props.$isVisible ? 'translateY(0)' : 'translateY(10px)')};
@@ -24,7 +24,7 @@ export const BackToTopButton = styled.button<{ readonly $isVisible: boolean }>`
 
   &:hover {
     transform: ${props => (props.$isVisible ? 'translateY(-2px)' : 'translateY(10px)')};
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
   }
 
   &:active {
@@ -32,23 +32,23 @@ export const BackToTopButton = styled.button<{ readonly $isVisible: boolean }>`
   }
 
   &:focus-visible {
-    outline: 2px solid #2D5A87;
+    outline: 2px solid ${props => props.theme.colors.primary};
     outline-offset: 2px;
   }
 
   @media (max-width: 768px) {
     bottom: 1.5rem;
-    right: 1.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
+    left: 1.25rem;
+    width: 2.6rem;
+    height: 2.6rem;
   }
 `
 
 export const ArrowIcon = styled.div`
   width: 0;
   height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 8px solid currentColor;
-  margin-bottom: 2px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid currentColor;
+  margin-bottom: 1px;
 `

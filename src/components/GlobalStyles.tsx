@@ -46,7 +46,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: ${props => props.theme.fonts.secondary};
+    font-family: ${props => props.theme.fonts.primary};
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: ${props => props.theme.spacing.sm};

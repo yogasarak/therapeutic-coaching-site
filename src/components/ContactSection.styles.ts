@@ -47,6 +47,13 @@ export const ContactForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: ${props => props.theme.spacing.lg};
+  max-width: 460px;
+  width: 100%;
+  align-self: center;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    max-width: 360px;
+  }
 `
 
 export const FormField = styled.div`
@@ -77,6 +84,10 @@ export const Input = styled.input`
   &::placeholder {
     color: ${props => props.theme.colors.textMuted};
   }
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: ${props => props.theme.spacing.sm};
+    font-size: 0.95rem;
+  }
 `
 
 export const TextArea = styled.textarea`
@@ -97,6 +108,11 @@ export const TextArea = styled.textarea`
   
   &::placeholder {
     color: ${props => props.theme.colors.textMuted};
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    padding: ${props => props.theme.spacing.sm};
+    font-size: 0.95rem;
   }
 `
 
@@ -125,6 +141,13 @@ export const SubmitButton = styled.button<{ readonly $isSubmitting: boolean }>`
   
   &:active:not(:disabled) {
     transform: translateY(0);
+  }
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    width: auto;
+    align-self: center;
+    padding: ${props => props.theme.spacing.sm} ${props => props.theme.spacing.lg};
+    font-size: 0.95rem;
   }
 `
 

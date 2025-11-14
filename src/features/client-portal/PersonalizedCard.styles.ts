@@ -39,13 +39,13 @@ export const CardBadge = styled.div<{ readonly $type: 'personal' | 'exercise' | 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem 0.75rem;
+  padding: 0.35rem 0.75rem;
   border-radius: ${props => props.theme.borderRadius.full};
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  line-height: 1;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.2;
   
   ${props => {
     switch (props.$type) {

@@ -81,7 +81,7 @@ const TestimonialsSection: React.FC = () => {
         
         <TestimonialCard>
           <StarRating>
-            {renderStars(currentTestimonial.rating)}
+            {/* {renderStars(currentTestimonial.rating)} */}
           </StarRating>
           
           <TestimonialText>

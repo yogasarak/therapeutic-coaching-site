@@ -81,7 +81,7 @@ export const ServiceFeature = styled.li`
 
   &::before {
     content: '✓';
-    color: ${props => props.theme.colors.secondary};
+    color: ${props => props.theme.colors.textMuted};
     font-weight: bold;
     margin-right: ${props => props.theme.spacing.sm};
     margin-top: 2px;

@@ -112,7 +112,7 @@ const DemoTour: React.FC = () => {
       summary: 'Walk through the gated workspace clients would receive.',
       bullets: [
         'Launch the live demo: therapeutic-coaching-site.vercel.app/client-portal.',
-        'Authenticate with the demo access code: therapeutic2024.',
+        'Authenticate with the demo access code: therapeutic2024',
         'Review personalized practice cards, homework tracking, and spotlight modal flows—all rendered via modal overlays to mirror the blog experience.',
         'Modal infrastructure mirrors the blog for consistent UX.',
       ],
