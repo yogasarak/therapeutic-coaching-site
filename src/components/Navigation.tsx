@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { NavigationSection } from '@/types'
 import { scrollToSection, throttle } from '@/utils'
+import { LOGO_URL } from '@/config/externalAssets'
 import {
   DesktopNav,
   Logo,
@@ -151,7 +152,7 @@ const Navigation: React.FC = () => {
         <NavWrapper>
           <Logo href="/">
             <LogoIcon
-              src="/images/logo.png"
+              src={LOGO_URL}
               alt="Therapeutic Coaching logo"
               width={32}
               height={32}

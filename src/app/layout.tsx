@@ -5,6 +5,7 @@ import BackToTop from '@/components/BackToTop'
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 import DemoTour from '@/features/demo/DemoTourWrapper'
 import { Analytics } from '@vercel/analytics/react'
+import { FAVICON_URL, HERO_SOCIAL_IMAGE_URL } from '@/config/externalAssets'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,12 +27,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/images/favicon.png', type: 'image/png', sizes: '32x32' },
-      { url: '/images/favicon.png', type: 'image/png', sizes: '192x192' },
+      { url: FAVICON_URL, type: 'image/png', sizes: '32x32' },
+      { url: FAVICON_URL, type: 'image/png', sizes: '192x192' },
     ],
-    shortcut: ['/images/favicon.png'],
+    shortcut: [FAVICON_URL],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: FAVICON_URL, sizes: '180x180', type: 'image/png' },
     ],
   },
   title: {
@@ -56,14 +57,14 @@ export const metadata: Metadata = {
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
     siteName: 'Therapeutic Coaching',
     images: [
-      { url: '/images/favicon.png', width: 512, height: 512, alt: 'Therapeutic Coaching Logo' },
+      { url: HERO_SOCIAL_IMAGE_URL, width: 1200, height: 630, alt: 'Therapeutic Coaching Preview' },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Therapeutic Coaching | Transform Your Life',
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
-    images: ['/images/favicon.png'],
+    images: [HERO_SOCIAL_IMAGE_URL],
   },
   robots: {
     index: true,
@@ -83,6 +84,8 @@ const RootLayout = ({ children }: { readonly children: React.ReactNode }) => {
     <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${merriweather.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href={FAVICON_URL} />
+        <link rel="apple-touch-icon" href={FAVICON_URL} />
       </head>
       <body className={`${inter.variable} ${merriweather.variable}`}>
         <StyledComponentsRegistry>
