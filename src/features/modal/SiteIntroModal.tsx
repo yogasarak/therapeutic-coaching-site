@@ -6,10 +6,12 @@ import Modal from '@/features/modal/Modal'
 const STORAGE_KEY = 'site-intro-modal-dismissed'
 const OPEN_DELAY_MS = 1800
 
-const descriptionParagraphs = [
-  'Next.js App Router build that pairs pre-rendered marketing pages with a dynamic, cookie-backed client portal (/api/auth) and ships hardened metadata, sitemap/robots, and CSP/HSTS headers via next.config.',
-  'An MDX pipeline (next-mdx-remote + remark/rehype sanitize) caches frontmatter, powers audio-enhanced posts, and feeds client-side modal treatments sourced from MDX data attributes, while React controllers lean on derived state hooks to drive search and canonicalized topic badges.',
-  'A styled-components SSR registry, content validation + clean rebuild scripts, and Jest safety tests keep the UI modular, themeable, and production-ready.',
+const descriptionParagraphs: ReadonlyArray<React.ReactNode> = [
+  'A production-ready showcase pairing a password-gated client workspace with synchronized text/audio MDX posts, modal storytelling, search, and canonicalized topic badges.',
+  'Built as an advanced Next App Router demo—server actions, hardened CSP/HSTS headers, cached MDX pipelines, styled-components SSR registry, Jest coverage, and automated content validation plus clean rebuilds—delivering turnkey UI/UX for practitioners and clear architecture for engineers.',
+  <>
+    Visit therapeutic-coaching-site.vercel.app and launch the <strong>Guided Tour</strong> button in the corner for a walkthrough of the portal, blog filters, and engineering highlights.
+  </>,
 ]
 
 const SiteIntroModal: React.FC = () => {
@@ -63,8 +65,8 @@ const SiteIntroModal: React.FC = () => {
       closeOnEscape={true}
     >
       <div>
-        {descriptionParagraphs.map(text => (
-          <p key={text}>{text}</p>
+        {descriptionParagraphs.map((text, index) => (
+          <p key={index}>{text}</p>
         ))}
       </div>
     </Modal>

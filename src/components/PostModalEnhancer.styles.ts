@@ -43,13 +43,12 @@ export const ModalCloseButton = styled.button`
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: ${props => props.theme.borderRadius.sm};
-  transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  padding: 0;
+  transition: color 0.2s ease, transform 0.2s ease;
 
   &:hover {
     color: ${props => props.theme.colors.accent};
-    background-color: ${props => props.theme.colors.surface};
+    transform: translateY(-1px);
   }
 
   &:focus-visible {
@@ -81,4 +80,3 @@ export const ModalBody = styled.div`
     margin: 0 0 ${props => props.theme.spacing.sm} ${props => props.theme.spacing.md};
   }
 `
-
