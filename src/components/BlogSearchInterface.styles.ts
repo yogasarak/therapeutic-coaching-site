@@ -11,48 +11,45 @@ export const SearchInterfaceContainer = styled.div`
 export const FilterToggleButton = styled.button`
   background: none;
   border: none;
-  color: ${props => props.theme.colors.textMuted};
+  color: ${props => props.theme.colors.primary};
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: color 0.2s ease;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-radius: ${props => props.theme.borderRadius.md};
+  transition: color 0.2s ease;
   
   &:hover {
-    color: ${props => props.theme.colors.primary};
-    background-color: ${props => props.theme.colors.primary}10;
+    color: ${props => props.theme.colors.text};
   }
 
-  &:focus {
-    outline: none;
-    color: ${props => props.theme.colors.primary};
-    background-color: ${props => props.theme.colors.primary}15;
+  &:focus-visible {
+    outline: 2px solid ${props => props.theme.colors.primary};
+    outline-offset: 2px;
   }
 `
 
 export const SearchInputContainer = styled.div`
   width: 100%;
-  max-width: 600px;
+  max-width: 480px;
   position: relative;
 `
 
 export const SearchInput = styled.input`
   width: 100%;
-  padding: 1rem 1.5rem;
-  border: 2px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.borderRadius.lg};
-  font-size: 1.1rem;
-  background-color: ${props => props.theme.colors.background};
+  padding: 0.75rem 1.25rem;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius.full};
+  font-size: 0.95rem;
+  background-color: ${props => props.theme.colors.surface};
   color: ${props => props.theme.colors.text};
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  box-shadow: none;
   
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 3px ${props => props.theme.colors.primary}20;
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px ${props => props.theme.colors.primary}20;
   }
   
   &::placeholder {
@@ -60,22 +57,26 @@ export const SearchInput = styled.input`
   }
 
   @media (max-width: ${props => props.theme.breakpoints.tablet}) {
-    font-size: 1rem;
-    padding: 0.875rem 1.25rem;
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
   }
 `
 
 export const FilterChipsContainer = styled.div`
   width: 100%;
-  max-width: 700px;
-  margin-top: 1rem;
+  max-width: 640px;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 export const FilterChipsHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
+  width: 100%;
 `
 
 export const FilterLabel = styled.h4`
@@ -88,14 +89,14 @@ export const FilterLabel = styled.h4`
 export const ClearButton = styled.button`
   background: none;
   border: none;
-  color: ${props => props.theme.colors.accent};
+  color: ${props => props.theme.colors.text};
   font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
   text-decoration: underline;
   
   &:hover {
-    color: ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.textMuted};
   }
 `
 
@@ -126,7 +127,7 @@ export const FilterChip = styled.button<{ readonly $isActive: boolean }>`
       ? props.theme.colors.primary 
       : props.theme.colors.border
   };
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem;
   border-radius: ${props => props.theme.borderRadius.full};
   font-size: 0.85rem;
   font-weight: 500;
@@ -156,16 +157,18 @@ export const FilterChip = styled.button<{ readonly $isActive: boolean }>`
 
 export const ActiveFiltersDisplay = styled.div`
   margin-top: 1rem;
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   background: linear-gradient(135deg, ${props => props.theme.colors.primary}08, ${props => props.theme.colors.accent}08);
   border: 1px solid ${props => props.theme.colors.primary}20;
   border-radius: ${props => props.theme.borderRadius.lg};
   text-align: center;
+  max-width: 480px;
+  width: 100%;
 `
 
 export const ActiveFiltersText = styled.p`
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: ${props => props.theme.colors.text};
   font-weight: 500;
 `

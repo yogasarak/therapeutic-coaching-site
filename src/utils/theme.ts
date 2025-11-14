@@ -4,7 +4,7 @@ export const theme: Theme = {
   colors: {
     primary: '#2D5A87',
     secondary: '#8FBC8F',
-    accent: '#F4A460',
+    accent: '#E5E51C',
     background: '#FFFFFF',
     surface: '#F8F9FA',
     text: '#2C3E50',
@@ -16,7 +16,7 @@ export const theme: Theme = {
   },
   fonts: {
     primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    secondary: "'Merriweather', Georgia, serif",
+    secondary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   },
   spacing: {
     xs: '0.5rem',

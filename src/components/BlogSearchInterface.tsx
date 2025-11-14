@@ -45,7 +45,16 @@ export const BlogSearchInterface: React.FC<BlogSearchInterfaceProps> = ({
   placeholder = "Search articles, topics, and insights..."
 }) => {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onSearchChange(event.target.value)
+    const { value } = event.target
+    onSearchChange(value)
+
+    const normalizedInput = canonicalizeTag(value)
+    if (normalizedInput) {
+      const hasMatchingTag = availableTags.some(rawTag => canonicalizeTag(rawTag) === normalizedInput)
+      if (hasMatchingTag && !selectedTags.includes(normalizedInput)) {
+        onTagToggle(normalizedInput)
+      }
+    }
   }
 
   const hasActiveFilters = Boolean(searchValue.trim()) || selectedTags.length > 0
@@ -67,7 +76,7 @@ export const BlogSearchInterface: React.FC<BlogSearchInterfaceProps> = ({
         type="button"
         aria-expanded={isFiltersVisible}
       >
-        {isFiltersVisible ? '✕ Hide topics' : '🏷 Browse by topic'}
+        {isFiltersVisible ? '✕ Hide topics' : 'Browse by topic'}
       </FilterToggleButton>
 
       <SearchInputContainer>

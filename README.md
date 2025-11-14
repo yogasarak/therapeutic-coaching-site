@@ -7,7 +7,7 @@ It doubles as an advanced Next.js App Router showcase: server actions, hardened 
 ![Therapeutic Nexus preview](public/images/therapeutic-nexus.png)
 
 
-## 🚀 Features
+## Features
 
 ### Core Functionality
 - **Responsive One-Page Landing**: Story, services, testimonials, and contact sections
@@ -23,7 +23,7 @@ It doubles as an advanced Next.js App Router showcase: server actions, hardened 
 - **Security Headers**: Content Security Policy, HTTPS enforcement, and security best practices
 - **Vercel Deployment**: Optimized for free Vercel hosting with automatic deployments
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Framework**: Next.js 15.5.0 (App Router)
 - **Language**: TypeScript (strict mode, no `any` types)
@@ -32,7 +32,7 @@ It doubles as an advanced Next.js App Router showcase: server actions, hardened 
 - **Deployment**: Vercel
 - **Fonts**: Inter + Merriweather (Google Fonts)
 
-## 📦 Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -55,7 +55,7 @@ It doubles as an advanced Next.js App Router showcase: server actions, hardened 
    http://localhost:3000
    ```
 
-## 🏗 Project Structure
+## Project Structure
 
 ```
 src/
@@ -85,7 +85,7 @@ src/
 └── utils/                   # Theme + utility helpers
 ```
 
-## 📝 Content Management
+## Content Management & Filters
 
 ### Blog authoring workflow
 
@@ -109,6 +109,18 @@ src/
    This ensures all local and external assets are resolvable and on approved hosts.
 5. Commit the MDX file (the front-matter snapshot regenerates automatically on the next build).
 
+### Blog search & filters
+
+- Keyword search auto-selects the matching topic chip (typing “audio” toggles the audio badge), keeping the chips and text entry in sync.
+- Selected filters surface in a gradient badge under the topic controls, with a “Clear selection” action to reset.
+
+### Protected assets
+
+- Sensitive files live outside `public/` in `protected-assets/`.
+- The route handler at `/api/protected-images/[...assetPath]` streams files only when the request includes the `ASSET_ACCESS_TOKEN`.
+- Set `ASSET_ACCESS_TOKEN` in your environment (Vercel → Environment Variables) and supply it via the `x-protected-token` header or `?token=` query when requesting an asset.
+- Keep in mind: files committed to a public repo remain visible via Git history—move private media out of version control to keep them truly private.
+
 ### Customizing Content
 
 - **Hero Section**: Edit `src/components/HeroSection.tsx` or `SimpleHero.tsx`
@@ -116,7 +128,7 @@ src/
 - **Testimonials**: Modify the `testimonials` array in `TestimonialsSection.tsx`
 - **Contact Info**: Update contact details in `ContactSection.tsx`
 
-## 🎨 Design System
+## Design System
 
 ### Colors
 ```css
@@ -141,7 +153,7 @@ src/
 --spacing-xxl: 4rem    /* 64px */
 ```
 
-## 🔧 Development
+## Development
 
 ### Available Scripts
 
@@ -267,7 +279,7 @@ The project includes:
   - Sanitizer strips script tags and unexpected attributes by default.
 
 
-## 📊 Performance & SEO
+## Performance & SEO
 
 ### Lighthouse Targets
 - **Performance**: 90+
@@ -292,7 +304,7 @@ The project includes:
 - Screen reader optimization
 - Color contrast compliance
 
-## 🔒 Security
+## Security
 
 ### Security Headers
 - **CSP**: Content Security Policy configured
@@ -308,7 +320,7 @@ The project includes:
 - HTTPS enforcement
 - Environment variable protection
 
-## 🧪 Testing
+## Testing
 
 ### Manual Testing Checklist
 
@@ -361,7 +373,7 @@ The project includes:
 - Optimize images before uploading
 - Check bundle size with `npm run build`
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Styled Components Guide](https://styled-components.com/docs)
@@ -369,17 +381,10 @@ The project includes:
 - [Vercel Deployment Guide](https://vercel.com/docs)
 - [Web Accessibility Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make changes following the code style guidelines
-4. Test thoroughly (manual testing checklist above)
-5. Submit a pull request
+## License
 
-## 📄 License
-
-This project is licensed under the MIT License. See LICENSE file for details.
+This project is licensed by Sara Keyser 2025 under the MIT License. See LICENSE file for details.
 
 ---
 
