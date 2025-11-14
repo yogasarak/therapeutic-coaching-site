@@ -3,6 +3,7 @@ import { Inter, Merriweather } from 'next/font/google'
 import ClientThemeProvider from '@/components/ClientThemeProvider'
 import BackToTop from '@/components/BackToTop'
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
+import DemoTour from '@/features/demo/DemoTourWrapper'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,6 +22,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app'),
   alternates: {
     canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://your-coaching-site.vercel.app',
+  },
+  icons: {
+    icon: '/images/favicon.png',
+    shortcut: '/images/favicon.png',
+    apple: '/images/favicon.png',
   },
   title: {
     default: 'Therapeutic Coaching | Transform Your Life',
@@ -44,14 +50,14 @@ export const metadata: Metadata = {
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
     siteName: 'Therapeutic Coaching',
     images: [
-      { url: '/images/og-image.jpg', width: 1200, height: 630, alt: 'Therapeutic Coaching' },
+      { url: '/images/favicon.png', width: 512, height: 512, alt: 'Therapeutic Coaching Logo' },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Therapeutic Coaching | Transform Your Life',
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
-    images: ['/images/og-image.jpg'],
+    images: ['/images/favicon.png'],
   },
   robots: {
     index: true,
@@ -66,11 +72,7 @@ export const metadata: Metadata = {
   },
 }
 
-interface RootLayoutProps {
-  readonly children: React.ReactNode
-}
-
-const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
+const RootLayout = ({ children }: { readonly children: React.ReactNode }) => {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${merriweather.variable}`}>
       <head>
@@ -79,6 +81,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
       <body className={`${inter.variable} ${merriweather.variable}`}>
         <StyledComponentsRegistry>
           <ClientThemeProvider>
+            <DemoTour />
             {children}
             <BackToTop />
           </ClientThemeProvider>

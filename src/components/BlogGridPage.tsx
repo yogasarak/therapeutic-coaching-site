@@ -247,7 +247,7 @@ const BlogGridPage: React.FC<BlogGridPageProps> = ({ posts }) => {
         {/* No demo modal */}
       </Container>
 
-      <PracticeSection>
+      <PracticeSection id="practice-spotlights">
         <PracticeHeader>
           <h2>Therapeutic Practice Spotlights</h2>
           <p>

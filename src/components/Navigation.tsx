@@ -20,6 +20,7 @@ const navigationSections: ReadonlyArray<NavigationSection> = [
   { id: 'story', label: 'Story', href: '/#story' },
   { id: 'services', label: 'Services', href: '/#services' },
   { id: 'testimonials', label: 'Testimonials', href: '/#testimonials' },
+  { id: 'portal', label: 'Portal', href: '/client-portal' },
   { id: 'blog', label: 'Blog', href: '/blog' },
   { id: 'contact', label: 'Contact', href: '/#contact' },
 ] as const
@@ -28,6 +29,7 @@ const Navigation: React.FC = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [activeSection, setActiveSection] = useState<string>(() => {
+    if (pathname && pathname.startsWith('/client-portal')) return 'portal'
     if (pathname && pathname.startsWith('/blog')) return 'blog'
     if (pathname === '/') return 'home'
     return 'home'
@@ -54,7 +56,7 @@ const Navigation: React.FC = () => {
       if (isHomePage) {
         // Cache section elements to avoid repeated DOM queries
         const sectionElements = new Map<string, HTMLElement>()
-        const sectionIds = ['home', 'story', 'services', 'testimonials', 'blog', 'contact']
+        const sectionIds = ['home', 'story', 'services', 'testimonials', 'portal', 'blog', 'contact']
         
         sectionIds.forEach(id => {
           const element = document.getElementById(id)

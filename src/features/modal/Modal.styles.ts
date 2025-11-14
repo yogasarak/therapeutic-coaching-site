@@ -66,7 +66,7 @@ export const ModalContainer = styled.div`
 `
 
 export const ModalHeader = styled.div`
-  padding: 1.5rem 2rem 0;
+  padding: 1.5rem 2rem 1rem;
   border-bottom: 1px solid ${props => props.theme.colors.border};
   display: flex;
   justify-content: space-between;
@@ -74,7 +74,7 @@ export const ModalHeader = styled.div`
   flex-shrink: 0;
 
   @media (max-width: 768px) {
-    padding: 1rem 1.5rem 0;
+    padding: 1rem 1.5rem 0.75rem;
   }
 `
 
@@ -93,27 +93,23 @@ export const ModalTitle = styled.h2`
 export const CloseButton = styled.button`
   background: none;
   border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
   color: ${props => props.theme.colors.textMuted};
-  font-size: 1.5rem;
+  font-size: 2rem;
+  line-height: 1;
+
+  transition: transform 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background-color: ${props => props.theme.colors.border};
     color: ${props => props.theme.colors.text};
-    transform: scale(1.1);
-  }
-
-  &:focus {
-    outline: none;
-    background-color: ${props => props.theme.colors.primary}20;
-    color: ${props => props.theme.colors.primary};
+    transform: translateY(-1px);
   }
 `
 

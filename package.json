@@ -12,12 +12,14 @@
     "test:watch": "node ./node_modules/jest/bin/jest.js --watch",
     "test:ci": "node ./node_modules/jest/bin/jest.js --ci",
     "validate:content": "node scripts/validate-content.js",
-    "clean:build": "bash scripts/clean-rebuild.sh"
+    "clean:build": "bash scripts/clean-rebuild.sh",
+    "clean:all": "bash scripts/clean-all.sh"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^15.5.0",
+    "@vercel/analytics": "^1.5.0",
     "gray-matter": "^4.0.3",
     "marked": "^16.2.0",
     "next": "^15.5.3",
