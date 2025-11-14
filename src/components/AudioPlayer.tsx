@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 
 export interface AudioPlayerProps extends React.ComponentPropsWithoutRef<'audio'> {

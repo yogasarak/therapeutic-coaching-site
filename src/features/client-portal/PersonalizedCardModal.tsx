@@ -17,6 +17,8 @@ const extendedAllowedTags = Array.from(new Set([
   'h6',
   'blockquote',
   'iframe',
+  'audio',
+  'source',
 ]))
 
 const sanitizeOptions: SanitizeOptions = {
@@ -25,6 +27,8 @@ const sanitizeOptions: SanitizeOptions = {
     ...sanitizeHtml.defaults.allowedAttributes,
     a: ['href', 'name', 'target', 'rel'],
     iframe: ['src', 'width', 'height', 'allow', 'allowfullscreen', 'frameborder', 'loading', 'referrerpolicy', 'title', 'scrolling'],
+    audio: ['src', 'controls', 'preload', 'loop', 'muted', 'autoplay'],
+    source: ['src', 'type'],
   },
   allowedSchemes: ['http', 'https', 'mailto'],
   transformTags: {

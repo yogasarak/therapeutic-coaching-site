@@ -42,7 +42,10 @@ describe('getPostBySlug', () => {
     expect(mockedCompile).toHaveBeenCalledTimes(1)
     expect(firstCall?.contentHtml).toContain('data-modal="true"')
     expect(firstCall?.contentHtml).not.toContain('<script')
-    expect(firstCall?.contentMdx?.props['data-testid']).toBe('compiled-mdx')
+
+    const compiled = firstCall?.contentMdx as React.ReactElement | undefined
+    const compiledProps = compiled?.props as Record<string, unknown> | undefined
+    expect(compiledProps?.['data-testid']).toBe('compiled-mdx')
 
     const secondCall = await getPostBySlug(testSlug)
     expect(secondCall).not.toBeNull()

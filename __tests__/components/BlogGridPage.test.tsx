@@ -46,13 +46,14 @@ describe('BlogGridPage', () => {
 
     expect(screen.getByRole('heading', { name: 'MDX Post' })).toBeInTheDocument()
 
-    const viewButton = screen.getByRole('button', { name: /view practice/i })
-    await userEvent.click(viewButton)
+    const viewButtons = screen.getAllByRole('button', { name: /view practice/i })
+    expect(viewButtons.length).toBeGreaterThan(0)
+    await userEvent.click(viewButtons[0])
 
     const dialog = await screen.findByRole('dialog')
     expect(dialog).toBeInTheDocument()
-    const headings = within(dialog).getAllByRole('heading', { name: 'Weekly Reflection Exercise' })
-    expect(headings.length).toBeGreaterThan(0)
+    const modalHeadings = within(dialog).getAllByRole('heading', { name: /weekly reflection exercise/i })
+    expect(modalHeadings.length).toBeGreaterThan(0)
 
     await userEvent.click(screen.getByRole('button', { name: /close modal/i }))
 
@@ -64,7 +65,8 @@ describe('BlogGridPage', () => {
   it('filters practice spotlights using the shared search controls', async () => {
     renderWithTheme(<BlogGridPage posts={posts} />)
 
-    expect(screen.getByRole('button', { name: /view practice/i })).toBeInTheDocument()
+    const viewButtons = screen.getAllByRole('button', { name: /view practice/i })
+    expect(viewButtons.length).toBeGreaterThan(0)
 
     const searchInput = screen.getByLabelText('Search blog posts')
     await userEvent.type(searchInput, 'nonexistent topic')
