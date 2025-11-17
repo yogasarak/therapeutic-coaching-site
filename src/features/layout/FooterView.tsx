@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react'
+import { COPYRIGHT_NOTICE } from '@/constants/site'
 import SocialIcons, { type SocialLink } from '../social/SocialIcons'
 import {
   FooterContainer,
@@ -21,6 +22,7 @@ export interface FooterProps {
   readonly contactEmail?: string
   readonly showSocials?: boolean
   readonly className?: string
+  readonly copyrightNotice?: string
 }
 
 const FooterView: React.FC<FooterProps> = ({
@@ -30,8 +32,11 @@ const FooterView: React.FC<FooterProps> = ({
   contactEmail,
   showSocials = true,
   className,
+  copyrightNotice = COPYRIGHT_NOTICE,
 }) => {
-  const currentYear = new Date().getFullYear()
+  const copyrightText = businessName
+    ? `${copyrightNotice} · ${businessName}. All rights reserved.`
+    : `${copyrightNotice}. All rights reserved.`
 
   return (
     <FooterContainer className={className}>
@@ -63,7 +68,7 @@ const FooterView: React.FC<FooterProps> = ({
       
       <FooterBottom>
         <Copyright>
-          © {currentYear} {businessName}. All rights reserved.
+          {copyrightText}
         </Copyright>
       </FooterBottom>
     </FooterContainer>

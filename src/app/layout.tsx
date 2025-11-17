@@ -5,6 +5,7 @@ import BackToTop from '@/components/BackToTop'
 import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 import DemoTour from '@/features/demo/DemoTourWrapper'
 import { Analytics } from '@vercel/analytics/react'
+import { ASSET_URLS } from '@/constants/assets'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -26,12 +27,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/images/favicon.png', type: 'image/png', sizes: '32x32' },
-      { url: '/images/favicon.png', type: 'image/png', sizes: '192x192' },
+      { url: ASSET_URLS.favicon, type: 'image/png', sizes: '32x32' },
+      { url: ASSET_URLS.favicon, type: 'image/png', sizes: '192x192' },
     ],
-    shortcut: ['/images/favicon.png'],
+    shortcut: [ASSET_URLS.favicon],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: ASSET_URLS.appleTouchIcon, sizes: '180x180', type: 'image/png' },
     ],
   },
   title: {
@@ -56,14 +57,14 @@ export const metadata: Metadata = {
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
     siteName: 'Therapeutic Coaching',
     images: [
-      { url: '/images/favicon.png', width: 512, height: 512, alt: 'Therapeutic Coaching Logo' },
+      { url: ASSET_URLS.socialShare, width: 512, height: 512, alt: 'Therapeutic Coaching Social Preview' },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Therapeutic Coaching | Transform Your Life',
     description: 'Professional therapeutic coaching services to help you unlock your potential and create lasting positive change.',
-    images: ['/images/favicon.png'],
+    images: [ASSET_URLS.socialShare],
   },
   robots: {
     index: true,
