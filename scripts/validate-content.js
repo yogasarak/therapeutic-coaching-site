@@ -9,6 +9,7 @@ const allowedHosts = new Set([
   'soundcloud.com',
   'www.youtube.com',
   'player.vimeo.com',
+  'asgngaofemmqdyjcetkm.supabase.co',
 ])
 
 const assetPattern = /<(?:img|source)\s+[^>]*src="([^"]+)"|<iframe\s+[^>]*src="([^"]+)"|\bhref="([^"]+)"/g

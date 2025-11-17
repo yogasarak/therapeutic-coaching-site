@@ -4,7 +4,7 @@ Therapeutic Coaching Website is a production-ready Next.js 15 + TypeScript + sty
 
 It doubles as an advanced Next.js App Router showcase: server actions, hardened CSP/HSTS headers, cached MDX pipelines, a styled-components SSR registry, Jest coverage, and automation for content validation plus clean rebuilds, giving nontechnical practitioners a turnkey experience while engineers can inspect the architectural depth.
 
-![Therapeutic Nexus preview](public/images/therapeutic-nexus.png)
+![Therapeutic Nexus preview](https://asgngaofemmqdyjcetkm.supabase.co/storage/v1/object/public/therapeutic%20nexus%20images/therapeutic-nexus.png)
 
 
 ## Features
@@ -386,6 +386,3 @@ The project includes:
 
 This project is licensed by Sara Keyser 2025 under the MIT License. See LICENSE file for details.
 
----
-
-**Built with ❤️ for therapeutic coaching professionals**

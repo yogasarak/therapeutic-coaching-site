@@ -73,16 +73,32 @@ const DemoTour: React.FC = () => {
     }
   }, [])
 
-  const steps = useMemo<ReadonlyArray<TourStep>>(() => [
+  const allSteps = useMemo<ReadonlyArray<TourStep>>(() => [
+    {
+      id: 'navigation-scroll',
+      badge: 'Scroll Intelligence',
+      title: 'One-Page Scroll Navigation',
+      summary: 'Follow the one-page scroll—engineers see the routing, coaches feel the seamless guidance.',
+      bullets: [
+        'Coach view: Each section glows in the menu as you scroll, so the narrative feels intuitive start to finish.',
+        'Technical: Navigation.tsx throttles scroll listeners and shares a route map across desktop/mobile for zero-jank highlights.',
+        'Technical: scrollToSection in @/utils smooth-scrolls and updates history, mixing SPA polish with shareable hashes.',
+        'Coach view: Buttons and CTAs reuse that controller, nudging visitors straight to contact without guesswork.',
+      ],
+      actions: [
+        { label: 'Glide to Services', href: '/#services' },
+        { label: 'Open Blog', href: '/blog' },
+      ],
+    },
     {
       id: 'landing',
       badge: 'Coach Onboarding',
       title: 'Landing Experience',
-      summary: 'See how the marketing shell supports coaches evaluating this kit.',
+      summary: 'Peek at how the marketing shell pre-renders and sources assets for fast first paint.',
       bullets: [
-        'Hero, story, services, testimonials, and contact blocks share a consistent theme + motion.',
-        'Primary CTA scrolls smoothly using the shared navigation controller.',
-        'Sections reuse the same styled-components tokens to stay on-brand.',
+        'Technical: App Router pre-renders the hero and featured posts using cached frontmatter in src/lib/blog.',
+        'Coach view: Hero storytelling, testimonials, and CTAs stay on-brand with shared motion + styling tokens.',
+        'Technical: Image/text blocks pull from typed content modules, primed for a headless CMS swap.',
       ],
       actions: [
         { label: 'Jump to Services', href: '/#services' },
@@ -90,15 +106,15 @@ const DemoTour: React.FC = () => {
       ],
     },
     {
-      id: 'blog',
+      id: 'blog-filters',
       badge: 'Content Engine',
-      title: 'Interactive Blog',
-      summary: 'Review the MDX blog experience a coach would co-author.',
+      title: 'Blog Filters & Taxonomy',
+      summary: 'See how editors and readers move fast—smart filters for engineers, clarity for coaches.',
       bullets: [
-        'Search, topic badges, and canonicalized audio tags showcase consumer-grade filtering.',
-        'Preview practice spotlights from the same interface—each opens in a modal instead of a standalone MDX page.',
-        'Open any article to see synchronized text/audio playback and MDX-triggered modals.',
-        'Content sanitization + modal enhancer keep rich embeds safe.',
+        'Coach view: Topic badges, “new” ribbons, and search make it painless to surface the right practice for a client.',
+        'Technical: BlogSearchInterface streams the full index server-side, reusing MDX caches for instant filter updates.',
+        'Technical: TagFilter and NewContentBadge share one taxonomy map, so editors don’t babysit badge logic.',
+        'Coach view: Spotlight cards sit under the same filters—click once, modal opens, and you never lose your place.',
       ],
       actions: [
         { label: 'Go to Blog', href: '/blog' },
@@ -106,15 +122,33 @@ const DemoTour: React.FC = () => {
       ],
     },
     {
+      id: 'blog-audio',
+      badge: 'MDX Media',
+      title: 'Audio & Modal Workflow',
+      summary: 'Audio embeds and modals, ready for both code reviews and coaching sessions.',
+      bullets: [
+        'Coach view: SoundCloud meditations, transcripts, and calls-to-action live in one modal—share it in session and online.',
+        'Technical: MDX shortcodes compile through the cached pipeline in src/lib/blog.ts, so new embeds deploy without rebuild drag.',
+        'Technical: sanitize-html + MediaEmbed whitelist external players, keeping the modal hardened and accessibility-friendly.',
+        'Coach view: The exact same modal system powers the client portal, keeping experiences consistent across touchpoints.',
+      ],
+      actions: [
+        { label: 'Play the SoundCloud Demo', href: '/blog/meditation-sweet-sweet-steep' },
+        { label: 'See Media Components', href: '/blog/meditation-sweet-sweet-steep#listen-in' },
+      ],
+    },
+    {
       id: 'portal',
       badge: 'Client Workspace',
       title: 'Client Portal Demo',
-      summary: 'Walk through the gated workspace clients would receive.',
+      summary: 'Inspect the dynamic, auth-ready workspace that mirrors the blog experience.',
       bullets: [
-        'Launch the live demo: therapeutic-coaching-site.vercel.app/client-portal.',
-        'Authenticate with the demo access code: therapeutic2024',
-        'Review personalized practice cards, homework tracking, and spotlight modal flows—all rendered via modal overlays to mirror the blog experience.',
-        'Modal infrastructure mirrors the blog for consistent UX.',
+        'Coach view: Clients enter a single access code and land in a familiar, uplifting workspace.',
+        'Coach view: Use access code `therapeutic2024` to explore this client experience right now.',
+        'Technical: PasswordProtection checks /api/auth and guards the workspace behind the shared passphrase `therapeutic2024`.',
+        'Technical: Route stays client-side with export const dynamic = "force-dynamic" so auth state is always fresh.',
+        'Technical: next.config.mjs applies Cache-Control: no-store to /client-portal, blocking shared caches by design.',
+        'Coach view: Homework checklists, practice cards, and audio modals mirror the blog so guidance feels seamless.',
       ],
       actions: [
         { label: 'Open Client Portal', href: '/client-portal' },
@@ -124,11 +158,12 @@ const DemoTour: React.FC = () => {
       id: 'under-the-hood',
       badge: 'Tech Stack',
       title: 'Under the Hood',
-      summary: 'Highlight the engineering depth that powers the kit.',
+      summary: 'Highlight the rendering modes, hardening, and build tooling behind the kit.',
       bullets: [
-        'Next.js App Router, server actions, hardened CSP/HSTS, and sitemap/robots automation.',
-        'MDX pipeline with cached frontmatter, sanitize rules, and Jest coverage.',
-        'Styled-components SSR registry, theme tokens, and reusable utility helpers.',
+        'Technical: Next.js App Router blends static landing routes, cached MDX renders, and dynamic client data.',
+        'Coach view: Performance, accessibility, and motion guardrails make the brand feel polished and trustworthy.',
+        'Technical: Hardened CSP/HSTS headers, Jest coverage, and automated sitemap/robots ship with the template.',
+        'Coach view: Transparent tooling translates to reliability when pitching clients on this digital experience.',
       ],
       actions: [
         {
@@ -141,6 +176,11 @@ const DemoTour: React.FC = () => {
       ],
     },
   ], [])
+
+  const steps = useMemo<ReadonlyArray<TourStep>>(
+    () => allSteps.filter(step => step.id !== 'landing'),
+    [allSteps]
+  )
 
   const handleOpen = useCallback(() => {
     setIsOpen(true)

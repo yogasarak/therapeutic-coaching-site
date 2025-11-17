@@ -15,6 +15,7 @@ import {
   NavLink,
   NavWrapper,
 } from './Navigation.styles'
+import { ASSET_URLS } from '@/constants/assets'
 
 const navigationSections: ReadonlyArray<NavigationSection> = [
   { id: 'home', label: 'Home', href: '/' },
@@ -151,7 +152,7 @@ const Navigation: React.FC = () => {
         <NavWrapper>
           <Logo href="/">
             <LogoIcon
-              src="/images/logo.png"
+              src={ASSET_URLS.logo}
               alt="Therapeutic Coaching logo"
               width={32}
               height={32}

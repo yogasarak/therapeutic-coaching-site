@@ -38,8 +38,8 @@ Custom MDX components (e.g., `ModalBlock`) live in `src/components/mdx`, with se
 ## Content Safety
 - Sanitiser denies `<script>` and unknown attributes by default while whitelisting modal data attributes.
 - Asset validator script enforces:
-  - Local asset existence for `/images/*` and `/audio/*`.
-  - Remote embeds only on approved hosts (SoundCloud, YouTube, Vimeo).
+  - Supabase-hosted image assets (`https://asgngaofemmqdyjcetkm.supabase.co/...`) alongside local audio under `/audio/*`.
+  - Remote embeds only on approved hosts (SoundCloud, YouTube, Vimeo, Supabase media bucket).
 - SoundCloud metadata lives in `src/content/media/soundcloudTracks.ts` so blog posts and client cards reuse a single source of truth.
 
 ## Testing & Tooling

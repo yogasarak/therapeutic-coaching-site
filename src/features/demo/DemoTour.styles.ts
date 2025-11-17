@@ -93,12 +93,13 @@ export const Sparkle = styled.span<{ readonly $delay: number; readonly $duration
 export const TourContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.1rem;
 `
 
 export const StepHeader = styled.header`
   display: flex;
   flex-direction: column;
+  margin-bottom: 0.5rem;
 `
 
 export const StepBadge = styled.span`
@@ -133,7 +134,7 @@ export const StepList = styled.ul`
   padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.35rem;
 `
 
 export const StepListItem = styled.li`
