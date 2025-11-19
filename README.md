@@ -1,6 +1,6 @@
-# Therapeutic Coaching Website
+# Therapeutic Nexus
 
-Therapeutic Coaching Website is a production-ready Next.js 15 + TypeScript + styled-components build pairing a password-gated client portal with synchronized text/audio MDX posts, modal storytelling, search, and canonicalized topic badges—all wrapped in a responsive one-page marketing experience tuned for Vercel.
+This Therapeutic Coaching site is a production-ready Next.js 15 + TypeScript + styled-components build pairing a password-gated client portal with synchronized text/audio MDX posts, modal storytelling, search, and canonicalized topic badges—all wrapped in a responsive one-page marketing experience tuned for Vercel.
 
 It doubles as an advanced Next.js App Router showcase: server actions, hardened CSP/HSTS headers, cached MDX pipelines, a styled-components SSR registry, Jest coverage, and automation for content validation plus clean rebuilds, giving nontechnical practitioners a turnkey experience while engineers can inspect the architectural depth.
 
