@@ -6,14 +6,16 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 const isProd = process.env.NODE_ENV === 'production'
 const frameSources = 'https://w.soundcloud.com https://player.soundcloud.com https://soundcloud.com https://www.youtube.com https://player.vimeo.com'
 const supabaseImageHost = 'https://asgngaofemmqdyjcetkm.supabase.co'
-const prodCsp = `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: ${supabaseImageHost}; media-src 'self' blob:; connect-src 'self'; frame-src 'self' ${frameSources}; child-src 'self' ${frameSources}; object-src 'none'; base-uri 'self'; form-action 'self';`
-const devCsp = `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: ${supabaseImageHost}; media-src 'self' blob:; connect-src 'self' ws: wss:; frame-src 'self' ${frameSources}; child-src 'self' ${frameSources}; object-src 'none'; base-uri 'self'; form-action 'self';`
+const vercelAnalyticsScripts = 'https://va.vercel-scripts.com'
+const vercelInsightsApi = 'https://vitals.vercel-insights.com'
+const prodCsp = `default-src 'self'; script-src 'self' 'unsafe-inline' ${vercelAnalyticsScripts}; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: ${supabaseImageHost}; media-src 'self' blob:; connect-src 'self' ${vercelInsightsApi}; frame-src 'self' ${frameSources}; child-src 'self' ${frameSources}; object-src 'none'; base-uri 'self'; form-action 'self';`
+const devCsp = `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' ${vercelAnalyticsScripts}; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob: ${supabaseImageHost}; media-src 'self' blob:; connect-src 'self' ws: wss: ${vercelInsightsApi}; frame-src 'self' ${frameSources}; child-src 'self' ${frameSources}; object-src 'none'; base-uri 'self'; form-action 'self';`
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   devIndicators: {
-    buildActivityPosition: 'bottom-right',
+    position: 'bottom-right',
   },
   compiler: {
     styledComponents: {
