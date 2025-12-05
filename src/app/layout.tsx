@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     apple: [
       { url: ASSET_URLS.appleTouchIcon, sizes: '180x180', type: 'image/png' },
     ],
+    other: [
+      { rel: 'mask-icon', url: ASSET_URLS.safariPinnedTab, color: '#2D5A87' },
+    ],
   },
   title: {
     default: 'Therapeutic Coaching | Transform Your Life',
